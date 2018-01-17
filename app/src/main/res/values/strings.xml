@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Apptivities</string>
+
+    <string name="activity_activity_title">Activities</string>
+    <string name="activity_category_title">Categories</string>
+
+    <string name="activity_activity_context_menu_edit">Edit Activity</string>
+    <string name="activity_activity_context_menu_delete">Delete Activity</string>
+
+    <string name="activity_category_context_menu_edit">Edit Category</string>
+
+    <string name="activity_activity_list_menu_calendar">Calendar</string>
+    <string name="activity_activity_list_menu_category">Categories</string>
+    <string name="activity_activity_list_menu_activity">Activities</string>
+
+    <string name="new_category_dialog_title">New Category</string>
+    <string name="new_category_dialog_message">Assign a name and optionally a description to create a new category</string>
+    <string name="new_category_dialog_positive_button">Add</string>
+    <string name="new_category_dialog_empty_values_message">The name is required to create a new Category</string>
+
+    <string name="new_category_dialog_textView_name_hint">Name</string>
+    <string name="new_category_dialog_textView_description_hint">Description</string>
+
+    <string name="new_activity_dialog_title">New Activity</string>
+    <string name="new_activity_dialog_message">Set a description, dates and a category for your new activity</string>
+    <string name="new_activity_dialog_positive_button">Add</string>
+    <string name="new_activity_dialog_empty_values_message">The description and dates is required to create a new Activity</string>
+
+    <string name="new_activity_dialog_textView_description_hint">Description</string>
+
+    <string name="edit_activity_dialog_title">Edit Activity</string>
+    <string name="edit_activity_dialog_message">Modify the Activity</string>
+    <string name="edit_activity_dialog_positive_button">Save</string>
+    <string name="edit_activity_dialog_empty_values_message">The description and dates are required to edit the current Activity</string>
+
+    <string name="edit_category_dialog_title">Edit Category</string>
+    <string name="edit_category_dialog_message">Modify the Category</string>
+    <string name="edit_category_dialog_positive_button">Save</string>
+    <string name="edit_category_dialog_empty_values_message">The category name is required to edit the current Category</string>
+
+
+    <string name="activity_activity_toast_title">Activity Data</string>
+    <string name="activity_activity_toast_description">Description</string>
+    <string name="activity_activity_toast_fechaIni">Start</string>
+    <string name="activity_activity_toast_fechaFin">End</string>
+</resources>

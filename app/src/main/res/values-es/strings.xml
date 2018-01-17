@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Apptividades</string>
+
+    <string name="activity_activity_title">Actividades</string>
+    <string name="activity_category_title">Categorías</string>
+
+    <string name="activity_activity_context_menu_edit">Editar Actividad</string>
+    <string name="activity_activity_context_menu_delete">Borrar Actividad</string>
+
+    <string name="activity_category_context_menu_edit">Editar Categoría</string>
+
+    <string name="activity_activity_list_menu_calendar">Calendario</string>
+    <string name="activity_activity_list_menu_category">Categorías</string>
+    <string name="activity_activity_list_menu_activity">Actividades</string>
+
+    <string name="new_category_dialog_title">Nueva Categoría</string>
+    <string name="new_category_dialog_message">Assigna un nombre y opcionalmente una descripción para crear una nueva categoría</string>
+    <string name="new_category_dialog_positive_button">Agregar</string>
+    <string name="new_category_dialog_empty_values_message">El nombre es necesario para crear una nueva Categoría</string>
+
+    <string name="new_category_dialog_textView_name_hint">Nombre</string>
+    <string name="new_category_dialog_textView_description_hint">Descripción</string>
+
+    <string name="new_activity_dialog_title">Nueva Actividad</string>
+    <string name="new_activity_dialog_message">Indica una descripción, fechas y una categoría para tu nueva actividad</string>
+    <string name="new_activity_dialog_positive_button">Agregar</string>
+    <string name="new_activity_dialog_empty_values_message">La descripción y las fechas son necesarias para crear una nueva Actividad</string>
+
+    <string name="new_activity_dialog_textView_description_hint">Descripción</string>
+
+    <string name="edit_activity_dialog_title">Editar Actividad</string>
+    <string name="edit_activity_dialog_message">Modifica la Actividad</string>
+    <string name="edit_activity_dialog_positive_button">Guardar</string>
+    <string name="edit_activity_dialog_empty_values_message">La descripción y fechas son necesarios para modificar la presente Actividad</string>
+
+    <string name="edit_category_dialog_title">Editar Categoría</string>
+    <string name="edit_category_dialog_message">Modifica la Categoría</string>
+    <string name="edit_category_dialog_positive_button">Guardar</string>
+    <string name="edit_category_dialog_empty_values_message">El nombre de la categoría es necesario para modificar la presente Categoría</string>
+
+    <string name="activity_activity_toast_title">Datos de Actividad</string>
+    <string name="activity_activity_toast_description">Descripción</string>
+    <string name="activity_activity_toast_fechaIni">Inicio</string>
+    <string name="activity_activity_toast_fechaFin">Fin</string>
+</resources>
