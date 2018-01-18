@@ -177,7 +177,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                         categorias.get(info.position));
                 return true;
             default:
-                // Prueba de codigo actualizado
+                // Prueba de codigo actualizado en temas 2
                 return super.onContextItemSelected(item);
         }
     }
