@@ -95,6 +95,15 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 .findAll();
     }
 
+    private Categoria datosCategoriaXID(int id){
+        Categoria categoria = new Categoria();
+        categoria = realm
+                .where(Categoria.class)
+                .equalTo("id", id)
+                .findFirst();
+        return categoria;
+    }
+
     private void createNewActivity(String descripcion, String fechaIni, String fechaFin, long categoria) {
         realm.beginTransaction();
         Date fechaIni2 = aux.stringToDate(fechaIni, formatoComplejo);
@@ -136,7 +145,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Date fechaCalendar = new Date(calendar.get);
                 String fechaCal =  String.valueOf(calendar.getDayOfMonth()) + "/" + String.valueOf(calendar.getMonth() + 1) + "/" + String.valueOf(calendar.getYear());
 
                 actividades = realm
@@ -148,11 +156,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 String fechaTitulo = aux.dateToString(aux.stringSimpleToDate(0,fechaCal,formatoSimple),formatoSimple);
                 setTitle(getString(R.string.activity_activity_title) + ": " + fechaTitulo);
                 Constructor();
-
-                /*Toast.makeText(getApplicationContext(),"Prueba de Click\n" +
-                        fechaCal + "\n" +
-                        todayFiltro(0,new Date()) + "\n" +
-                        stringSimpleToDate(0, fechaCal),Toast.LENGTH_LONG).show();*/
             }
         });
 
@@ -293,12 +296,15 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Actividad actividad = (Actividad) parent.getItemAtPosition(position);
+        Categoria categoria = datosCategoriaXID((int) (long) actividad.getCategoria());
+
         Toast.makeText(this, getString(R.string.activity_activity_toast_title) +"\n" +
                 "ID: " + actividad.getId() + "\n" +
                 getString(R.string.activity_activity_toast_description) + ": " + actividad.getDescripcion() + "\n" +
                 getString(R.string.activity_activity_toast_fechaIni) + ": " + actividad.getFechaIni() + "\n" +
-                getString(R.string.activity_activity_toast_fechaFin) + ": " + actividad.getFechaFin(),
-                Toast.LENGTH_SHORT).show();
+                getString(R.string.activity_activity_toast_fechaFin) + ": " + actividad.getFechaFin() + "\n" +
+                getString(R.string.activity_activity_toast_category) + ": " + categoria.getName()
+                , Toast.LENGTH_SHORT).show();
     }
 
     @Override
