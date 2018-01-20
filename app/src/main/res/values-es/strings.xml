@@ -43,4 +43,5 @@
     <string name="activity_activity_toast_description">Descripción</string>
     <string name="activity_activity_toast_fechaIni">Inicio</string>
     <string name="activity_activity_toast_fechaFin">Fin</string>
+    <string name="activity_activity_toast_category">Categoría</string>
 </resources>
