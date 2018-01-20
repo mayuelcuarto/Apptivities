@@ -296,14 +296,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Actividad actividad = (Actividad) parent.getItemAtPosition(position);
-        Categoria categoria = datosCategoriaXID((int) (long) actividad.getCategoria());
+        String categoriaNombre = getString(R.string.activity_activity_toast_category_empty);
+        //Aquí se controla como el toast responderá en caso no haber seleccionado una categoría para la actividad seleccionada.
+        if(actividad.getCategoria()>0) {
+            Categoria categoria = datosCategoriaXID((int) (long) actividad.getCategoria());
+            categoriaNombre = categoria.getName();
+        }
 
         Toast.makeText(this, getString(R.string.activity_activity_toast_title) +"\n" +
                 "ID: " + actividad.getId() + "\n" +
                 getString(R.string.activity_activity_toast_description) + ": " + actividad.getDescripcion() + "\n" +
                 getString(R.string.activity_activity_toast_fechaIni) + ": " + actividad.getFechaIni() + "\n" +
                 getString(R.string.activity_activity_toast_fechaFin) + ": " + actividad.getFechaFin() + "\n" +
-                getString(R.string.activity_activity_toast_category) + ": " + categoria.getName()
+                getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre
                 , Toast.LENGTH_SHORT).show();
     }
 

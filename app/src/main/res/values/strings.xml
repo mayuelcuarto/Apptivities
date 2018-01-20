@@ -44,4 +44,5 @@
     <string name="activity_activity_toast_fechaIni">Start</string>
     <string name="activity_activity_toast_fechaFin">End</string>
     <string name="activity_activity_toast_category">Category</string>
+    <string name="activity_activity_toast_category_empty">Empty</string>
 </resources>
