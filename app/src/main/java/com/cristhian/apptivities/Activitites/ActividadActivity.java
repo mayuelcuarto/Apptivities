@@ -245,6 +245,32 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         dialog.show();
     }
 
+    private void showAlertForDeletingActividad(String title, String message, final Actividad actividad){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        if(title != null) builder.setTitle(title);
+        if(message != null) builder.setMessage(message);
+
+        builder.setPositiveButton(getString(R.string.delete_activity_dialog_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.delete_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteActividad(actividad);
+                    }
+                }
+
+        );
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     /* Events */
 
     @Override
@@ -280,7 +306,10 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()){
             case R.id.delete_actividad:
-                deleteActividad(actividades.get(info.position));
+                showAlertForDeletingActividad(
+                        getString(R.string.delete_activity_dialog_title),
+                        getString(R.string.delete_activity_dialog_message),
+                        actividades.get(info.position));
                 return true;
             case R.id.edit_actividad:
                 showAlertForEditingActividad(

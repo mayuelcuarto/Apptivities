@@ -34,6 +34,11 @@
     <string name="edit_activity_dialog_positive_button">Guardar</string>
     <string name="edit_activity_dialog_empty_values_message">La descripción y fechas son necesarios para modificar la presente Actividad</string>
 
+    <string name="delete_activity_dialog_title">Borrar Actividad</string>
+    <string name="delete_activity_dialog_message">¿Estás seguro de querer borrar la actividad?</string>
+    <string name="delete_activity_dialog_positive_button">SI</string>
+    <string name="delete_activity_dialog_negative_button">NO</string>
+
     <string name="edit_category_dialog_title">Editar Categoría</string>
     <string name="edit_category_dialog_message">Modifica la Categoría</string>
     <string name="edit_category_dialog_positive_button">Guardar</string>
