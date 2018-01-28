@@ -31,7 +31,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-
 public class ActividadActivity extends AppCompatActivity implements RealmChangeListener<RealmResults<Actividad>>, AdapterView.OnItemClickListener{
 
     private Realm realm;
@@ -51,7 +50,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         datosRealm();
         setTitle(getString(R.string.activity_activity_title) + ": " + aux.dateToString(new Date(), formatoSimple));
         Constructor();
-
     }
 
     private void Constructor(){
