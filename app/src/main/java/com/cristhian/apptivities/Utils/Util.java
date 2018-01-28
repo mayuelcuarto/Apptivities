@@ -1,5 +1,8 @@
 package com.cristhian.apptivities.Utils;
 
+import com.cristhian.apptivities.R;
+
+import android.content.Context;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +12,12 @@ import java.util.Date;
  */
 
 public class Util {
+    private Context context;
+
+    public Util(Context context){
+        this.context = context;
+    }
+
     public Date stringToDate(String fechaString, String format){
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat(format);
         Date fechaDate = null;
@@ -65,5 +74,29 @@ public class Util {
             ex.printStackTrace();
         }
         return fechaDate;
+    }
+
+    public String restarFechas(Date fechaIni, Date fechaFin){
+        int diferencia = (int) (fechaIni.getTime() - fechaFin.getTime());
+        String respuesta = "";
+
+        int minutos = diferencia/(1000*60);
+        int horas = diferencia/(1000*60*60);
+        int dias = diferencia/(1000*60*60*24);
+
+        if(minutos/60 >= 1){
+            int restominutos = minutos%60;
+            respuesta =  String.format("%02d",horas) + ":" + String.format("%02d",restominutos) ;
+
+            if(horas/24 >= 1){
+                int restohoras = horas%24;
+                respuesta =  dias + " " + context.getString(R.string.util_restarFechas_days) + " " + String.format("%02d",restohoras) + ":" + String.format("%02d",restominutos);
+            }
+
+        }else{
+            respuesta = minutos + " " + context.getString(R.string.util_restarFechas_minutes);
+        }
+
+        return respuesta;
     }
 }

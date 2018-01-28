@@ -45,9 +45,14 @@
     <string name="edit_category_dialog_empty_values_message">El nombre de la categoría es necesario para modificar la presente Categoría</string>
 
     <string name="activity_activity_toast_title">Datos de Actividad</string>
+    <string name="activity_activity_toast_id">ID</string>
     <string name="activity_activity_toast_description">Descripción</string>
     <string name="activity_activity_toast_fechaIni">Inicio</string>
     <string name="activity_activity_toast_fechaFin">Fin</string>
     <string name="activity_activity_toast_category">Categoría</string>
+    <string name="activity_activity_toast_time">Tiempo</string>
     <string name="activity_activity_toast_category_empty">Vacío</string>
+
+    <string name="util_restarFechas_days">días</string>
+    <string name="util_restarFechas_minutes">minutos</string>
 </resources>

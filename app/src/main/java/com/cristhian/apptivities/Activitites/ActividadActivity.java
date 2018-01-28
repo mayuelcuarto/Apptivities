@@ -42,7 +42,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private FloatingActionButton fab;
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
-    private Util aux = new Util();
+    private Util aux = new Util(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     }
 
     private Categoria datosCategoriaXID(int id){
-        Categoria categoria = new Categoria();
-        categoria = realm
+        Categoria categoria = realm
                 .where(Categoria.class)
                 .equalTo("id", id)
                 .findFirst();
@@ -332,12 +331,17 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             categoriaNombre = categoria.getName();
         }
 
+        String fechaIni = aux.dateToString(actividad.getFechaIni(), formatoComplejo);
+        String fechaFin = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
+        String mensaje = aux.restarFechas(actividad.getFechaFin(), actividad.getFechaIni());
+
         Toast.makeText(this, getString(R.string.activity_activity_toast_title) +"\n" +
-                "ID: " + actividad.getId() + "\n" +
+                getString(R.string.activity_activity_toast_id) + ": " + actividad.getId() + "\n" +
                 getString(R.string.activity_activity_toast_description) + ": " + actividad.getDescripcion() + "\n" +
-                getString(R.string.activity_activity_toast_fechaIni) + ": " + actividad.getFechaIni() + "\n" +
-                getString(R.string.activity_activity_toast_fechaFin) + ": " + actividad.getFechaFin() + "\n" +
-                getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre
+                getString(R.string.activity_activity_toast_fechaIni) + ": " + fechaIni + "\n" +
+                getString(R.string.activity_activity_toast_fechaFin) + ": " + fechaFin + "\n" +
+                getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre + "\n" +
+                getString(R.string.activity_activity_toast_time) + ": " + mensaje
                 , Toast.LENGTH_SHORT).show();
     }
 
