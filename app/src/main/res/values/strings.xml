@@ -26,6 +26,7 @@
     <string name="new_activity_dialog_message">Set a description, dates and a category for your new activity</string>
     <string name="new_activity_dialog_positive_button">Add</string>
     <string name="new_activity_dialog_empty_values_message">The description and dates is required to create a new Activity</string>
+    <string name="new_activity_dialog_date_calculate_error_message">The end date cannot be less than start date</string>
 
     <string name="new_activity_dialog_textView_description_hint">Description</string>
 

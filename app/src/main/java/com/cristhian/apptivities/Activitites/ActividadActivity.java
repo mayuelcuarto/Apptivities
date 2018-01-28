@@ -187,10 +187,15 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 String actividadFechaIni = inputFechaIni.getText().toString().trim();
                 String actividadFechaFin = inputFechaFin.getText().toString().trim();
 
-                if(actividadDescripcion.length()>0 && actividadFechaIni.length()>0 && actividadFechaFin.length()>0){
-                    createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin,inputCategoria.getAdapter().getItemId(inputCategoria.getSelectedItemPosition())+1);
-                }else{
+                Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
+                Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
+
+                if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
                     Toast.makeText(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG).show();
+                }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
+                }else{
+                    createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin,inputCategoria.getAdapter().getItemId(inputCategoria.getSelectedItemPosition())+1);
                 }
             }
         });
@@ -232,8 +237,14 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 String actividadDescripcion = inputActividadDescripcion.getText().toString().trim();
                 String actividadFechaIni = inputActividadFechaIni.getText().toString().trim();
                 String actividadFechaFin = inputActividadFechaFin.getText().toString().trim();
+
+                Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
+                Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
+
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
                     Toast.makeText(getApplicationContext(), getString(R.string.edit_activity_dialog_empty_values_message), Toast.LENGTH_LONG).show();
+                }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
                 }else{
                     editActividad(actividadDescripcion,actividadFechaIni,actividadFechaFin,inputCategoria.getAdapter().getItemId(inputCategoria.getSelectedItemPosition())+1,actividad);
                 }

@@ -26,6 +26,7 @@
     <string name="new_activity_dialog_message">Indica una descripción, fechas y una categoría para tu nueva actividad</string>
     <string name="new_activity_dialog_positive_button">Agregar</string>
     <string name="new_activity_dialog_empty_values_message">La descripción y las fechas son necesarias para crear una nueva Actividad</string>
+    <string name="new_activity_dialog_date_calculate_error_message">La fecha de finalización no puede ser inferior a la fecha de inicio</string>
 
     <string name="new_activity_dialog_textView_description_hint">Descripción</string>
 

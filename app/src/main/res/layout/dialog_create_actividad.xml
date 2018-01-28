@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:hint="dd/MM/yyyy HH:mm" />
+        android:hint="dd/MM/yyyy HH:mm"
+        android:maxLength="16" />
 
     <EditText
         android:id="@+id/editTextNewActividadFechaFin"
@@ -24,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:hint="dd/MM/yyyy HH:mm"
-        android:text=""/>
+        android:maxLength="16" />
 
     <Spinner
         android:id="@+id/spinner"
