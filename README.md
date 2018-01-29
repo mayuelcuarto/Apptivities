@@ -1,10 +1,11 @@
 # Apptivities
 
-Apptivities es un proyecto de tiempo libre en el cu·l he tratado de crear una agenda en la cu·l registro todas las actividades que realizo a lo largo del dÌa.
+Apptivities es un proyecto de tiempo libre en el cu√°l he tratado de crear una agenda en la cu√°l registro todas las actividades que realizo a lo largo del d√≠a.
 
-Las tecnologÌas que utiliza son:
+Las tecnolog√≠as que utiliza son:
 
-- Api de desarrollo android 23.
-- Gestor de base de datos realm-android
+- compileSdkVersion 23.
+- minSdkVersion 21
+- Gestor de base de datos realm-database
 
-Actualmente el app funciona en entorno local exclusivamente (no conecta con ning˙n recurso de internet).
+Actualmente el app funciona en entorno local exclusivamente (no conecta con ning√∫n recurso de internet).
