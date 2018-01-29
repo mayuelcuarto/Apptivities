@@ -31,6 +31,10 @@ public class CategoriaSpinnerAdapter extends BaseAdapter {
         return list.size();
     }
 
+    public int getPosition(Categoria categoria){
+        return list.indexOf(categoria);
+    }
+
     @Override
     public Categoria getItem(int position) {
         return list.get(position);

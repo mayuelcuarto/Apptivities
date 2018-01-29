@@ -38,6 +38,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private RealmResults<Categoria> categorias;
     private ListView listView;
     private ActividadAdapter adapter;
+    private CategoriaSpinnerAdapter adapter2;
     private FloatingActionButton fab;
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
@@ -90,7 +91,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private void datosCategorias(){
         categorias = realm
                 .where(Categoria.class)
-                .findAll();
+                .findAllSorted("name");
     }
 
     private Categoria datosCategoriaXID(int id){
@@ -176,7 +177,9 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         inputFechaFin.setText(aux.dateToString(new Date(), formatoComplejo));
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinner);
         datosCategorias();
-        inputCategoria.setAdapter(new CategoriaSpinnerAdapter(this, categorias ,R.layout.spinner_categoria_item));
+
+        adapter2 = new CategoriaSpinnerAdapter(this, categorias, R.layout.spinner_categoria_item);
+        inputCategoria.setAdapter(adapter2);
 
         builder.setPositiveButton(getString(R.string.new_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
             @Override
@@ -188,12 +191,14 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
 
+                Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
+
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
                     Toast.makeText(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG).show();
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
                 }else{
-                    createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin,inputCategoria.getAdapter().getItemId(inputCategoria.getSelectedItemPosition())+1);
+                      createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin, categoria.getId());
                 }
             }
         });
@@ -222,12 +227,12 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         String fechaFinStr = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
         inputActividadFechaFin.setText(fechaFinStr);
         long categoriaID = actividad.getCategoria();
+        Categoria categoriaRealm = datosCategoriaXID((int) (long) categoriaID);
 
         datosCategorias();
-        inputCategoria.setAdapter(new CategoriaSpinnerAdapter(this, categorias ,R.layout.spinner_categoria_item));
-        Integer i = (int) (long) categoriaID - 1;
-        //Toast.makeText(this,"Item seleccionado:" + i,Toast.LENGTH_LONG).show();
-        inputCategoria.setSelection(i);
+        adapter2 = new CategoriaSpinnerAdapter(this, categorias, R.layout.spinner_categoria_item);
+        inputCategoria.setAdapter(adapter2);
+        inputCategoria.setSelection(adapter2.getPosition(categoriaRealm));
 
         builder.setPositiveButton(getString(R.string.edit_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
             @Override
@@ -239,12 +244,14 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
 
+                Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
+
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
                     Toast.makeText(getApplicationContext(), getString(R.string.edit_activity_dialog_empty_values_message), Toast.LENGTH_LONG).show();
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
                 }else{
-                    editActividad(actividadDescripcion,actividadFechaIni,actividadFechaFin,inputCategoria.getAdapter().getItemId(inputCategoria.getSelectedItemPosition())+1,actividad);
+                    editActividad(actividadDescripcion,actividadFechaIni,actividadFechaFin,categoria.getId(),actividad);
                 }
             }
         });
