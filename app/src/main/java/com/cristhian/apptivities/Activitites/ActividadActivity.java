@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.cristhian.apptivities.Adapters.ActividadAdapter;
@@ -40,6 +41,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private ActividadAdapter adapter;
     private CategoriaSpinnerAdapter adapter2;
     private FloatingActionButton fab;
+    private static String formatoHora = "HH";
+    private static String formatoMinuto = "mm";
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
     private Util aux = new Util(this);
@@ -175,6 +178,13 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         inputFechaIni.setText(aux.dateToString(new Date(), formatoComplejo));
         final EditText inputFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
         inputFechaFin.setText(aux.dateToString(new Date(), formatoComplejo));
+
+        final TimePicker inputTimePickerActividadFechaIni = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaIni);
+        inputTimePickerActividadFechaIni.setIs24HourView(true);
+
+        final TimePicker inputTimePickerActividadFechaFin = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaFin);
+        inputTimePickerActividadFechaFin.setIs24HourView(true);
+
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinner);
         datosCategorias();
 
@@ -185,8 +195,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String actividadDescripcion = inputDescripcion.getText().toString().trim();
-                String actividadFechaIni = inputFechaIni.getText().toString().trim();
-                String actividadFechaFin = inputFechaFin.getText().toString().trim();
+                String actividadFechaIni = inputFechaIni.getText().toString().trim() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
+                String actividadFechaFin = inputFechaFin.getText().toString().trim() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
 
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
@@ -221,11 +231,24 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         final EditText inputActividadFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinner);
 
+        final TimePicker inputTimePickerActividadFechaIni = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaIni);
+        inputTimePickerActividadFechaIni.setIs24HourView(true);
+
+        final TimePicker inputTimePickerActividadFechaFin = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaFin);
+        inputTimePickerActividadFechaFin.setIs24HourView(true);
+
         inputActividadDescripcion.setText(actividad.getDescripcion());
-        String fechaIniStr = aux.dateToString(actividad.getFechaIni(), formatoComplejo);
+
+        String fechaIniStr = aux.dateToString(actividad.getFechaIni(), formatoSimple);
         inputActividadFechaIni.setText(fechaIniStr);
-        String fechaFinStr = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
+        inputTimePickerActividadFechaIni.setCurrentHour(Integer.parseInt(aux.dateToString(actividad.getFechaIni(), formatoHora)));
+        inputTimePickerActividadFechaIni.setCurrentMinute(Integer.parseInt(aux.dateToString(actividad.getFechaIni(), formatoMinuto)));
+
+        String fechaFinStr = aux.dateToString(actividad.getFechaFin(), formatoSimple);
         inputActividadFechaFin.setText(fechaFinStr);
+        inputTimePickerActividadFechaFin.setCurrentHour(Integer.parseInt(aux.dateToString(actividad.getFechaFin(), formatoHora)));
+        inputTimePickerActividadFechaFin.setCurrentMinute(Integer.parseInt(aux.dateToString(actividad.getFechaFin(), formatoMinuto)));
+
         long categoriaID = actividad.getCategoria();
         Categoria categoriaRealm = datosCategoriaXID((int) (long) categoriaID);
 
@@ -238,8 +261,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String actividadDescripcion = inputActividadDescripcion.getText().toString().trim();
-                String actividadFechaIni = inputActividadFechaIni.getText().toString().trim();
-                String actividadFechaFin = inputActividadFechaFin.getText().toString().trim();
+                String actividadFechaIni = inputActividadFechaIni.getText().toString().trim() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
+                String actividadFechaFin = inputActividadFechaFin.getText().toString().trim() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
 
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
