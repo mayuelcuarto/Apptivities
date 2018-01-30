@@ -23,6 +23,7 @@ import com.cristhian.apptivities.Adapters.ActividadAdapter;
 import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
+import com.cristhian.apptivities.Utils.MaskWatcher;
 import com.cristhian.apptivities.Utils.Util;
 import com.cristhian.apptivities.R;
 
@@ -176,8 +177,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextNewActividadDescripcion);
         final EditText inputFechaIni = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaIni);
         inputFechaIni.setText(aux.dateToString(new Date(), formatoComplejo));
+        inputFechaIni.addTextChangedListener(new MaskWatcher("##/##/####"));
+
         final EditText inputFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
         inputFechaFin.setText(aux.dateToString(new Date(), formatoComplejo));
+        inputFechaFin.addTextChangedListener(new MaskWatcher("##/##/####"));
 
         final TimePicker inputTimePickerActividadFechaIni = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaIni);
         inputTimePickerActividadFechaIni.setIs24HourView(true);
@@ -205,6 +209,10 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
                     Toast.makeText(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG).show();
+                }else if(aux.validarFecha(inputFechaIni.getText().toString().trim(),formatoSimple)==false){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG).show();
+                }else if(aux.validarFecha(inputFechaFin.getText().toString().trim(),formatoSimple)==false){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG).show();
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
                 }else{
@@ -228,7 +236,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
         final EditText inputActividadDescripcion = (EditText) viewInflated.findViewById(R.id.editTextNewActividadDescripcion);
         final EditText inputActividadFechaIni = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaIni);
+        inputActividadFechaIni.addTextChangedListener(new MaskWatcher("##/##/####"));
+
         final EditText inputActividadFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
+        inputActividadFechaFin.addTextChangedListener(new MaskWatcher("##/##/####"));
+
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinner);
 
         final TimePicker inputTimePickerActividadFechaIni = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaIni);
@@ -270,7 +282,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.edit_activity_dialog_empty_values_message), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_empty_values_message), Toast.LENGTH_LONG).show();
+                }else if(aux.validarFecha(inputActividadFechaIni.getText().toString().trim(),formatoSimple)==false){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG).show();
+                }else if(aux.validarFecha(inputActividadFechaFin.getText().toString().trim(),formatoSimple)==false){
+                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG).show();
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
                 }else{
@@ -302,7 +318,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                         deleteActividad(actividad);
                     }
                 }
-
         );
 
         AlertDialog dialog = builder.create();

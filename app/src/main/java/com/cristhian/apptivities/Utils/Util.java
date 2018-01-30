@@ -99,4 +99,24 @@ public class Util {
 
         return respuesta;
     }
+
+    public boolean validarFecha(String fecha, String formato) {
+
+        try {
+
+            SimpleDateFormat formatoFecha = new SimpleDateFormat(formato);
+
+            formatoFecha.setLenient(false);
+
+            formatoFecha.parse(fecha);
+
+        } catch (ParseException e) {
+
+            return false;
+
+        }
+
+        return true;
+
+    }
 }

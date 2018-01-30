@@ -26,6 +26,8 @@
     <string name="new_activity_dialog_message">Set a description, dates and a category for your new activity</string>
     <string name="new_activity_dialog_positive_button">Add</string>
     <string name="new_activity_dialog_empty_values_message">The description and dates is required to create a new Activity</string>
+    <string name="new_activity_dialog_wrong_fechaIni_message">The start date is not valid</string>
+    <string name="new_activity_dialog_wrong_fechaFin_message">The end date is not valid</string>
     <string name="new_activity_dialog_date_calculate_error_message">The end date cannot be less than start date</string>
 
     <string name="new_activity_dialog_textView_description_hint">Description</string>
@@ -33,7 +35,6 @@
     <string name="edit_activity_dialog_title">Edit Activity</string>
     <string name="edit_activity_dialog_message">Modify the Activity</string>
     <string name="edit_activity_dialog_positive_button">Save</string>
-    <string name="edit_activity_dialog_empty_values_message">The description and dates are required to edit the current Activity</string>
 
     <string name="delete_activity_dialog_title">Delete Activity</string>
     <string name="delete_activity_dialog_message">Are you sure you want to delete the activity?</string>
