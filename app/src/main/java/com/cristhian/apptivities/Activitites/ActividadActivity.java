@@ -1,5 +1,6 @@
 package com.cristhian.apptivities.Activitites;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -208,18 +210,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
-                    Toast.makeText(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
                       createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin, categoria.getId());
                 }
             }
-        });
+        }
+        );
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -282,19 +285,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_empty_values_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_empty_values_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputActividadFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputActividadFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
-                    Toast.makeText(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
                     editActividad(actividadDescripcion,actividadFechaIni,actividadFechaFin,categoria.getId(),actividad);
                 }
             }
         });
-
+        
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -389,19 +392,27 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         String fechaFin = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
         String mensaje = aux.restarFechas(actividad.getFechaFin(), actividad.getFechaIni());
 
-        Toast.makeText(this, getString(R.string.activity_activity_toast_title) +"\n" +
+        CustomToast(this,
+                getString(R.string.activity_activity_toast_title) +"\n" +
                 getString(R.string.activity_activity_toast_id) + ": " + actividad.getId() + "\n" +
                 getString(R.string.activity_activity_toast_description) + ": " + actividad.getDescripcion() + "\n" +
                 getString(R.string.activity_activity_toast_fechaIni) + ": " + fechaIni + "\n" +
                 getString(R.string.activity_activity_toast_fechaFin) + ": " + fechaFin + "\n" +
                 getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre + "\n" +
-                getString(R.string.activity_activity_toast_time) + ": " + mensaje
-                , Toast.LENGTH_SHORT).show();
+                getString(R.string.activity_activity_toast_time) + ": " + mensaje,
+                Toast.LENGTH_LONG);
     }
 
     @Override
     public void onChange(RealmResults<Actividad> element) {
         adapter.notifyDataSetChanged();
+    }
+
+    private void CustomToast(Context context, String mensaje, int duracion){
+        Toast toast = Toast.makeText(context, mensaje, duracion);
+        toast.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        toast.getView().setPadding(10,10,10,10);
+        toast.show();
     }
 
     private void scrollMyListViewToBottom() {

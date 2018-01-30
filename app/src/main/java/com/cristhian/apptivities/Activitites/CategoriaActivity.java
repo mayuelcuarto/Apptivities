@@ -1,5 +1,6 @@
 package com.cristhian.apptivities.Activitites;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -114,7 +115,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 if(categoriaName.length()>0){
                     createNewCategory(categoriaName, categoriaDescripcion);
                 }else{
-                    Toast.makeText(getApplicationContext(),getString(R.string.new_category_dialog_empty_values_message),Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(),getString(R.string.new_category_dialog_empty_values_message),Toast.LENGTH_LONG);
                 }
             }
         });
@@ -145,7 +146,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 String categoriaDescripcion = inputCategoriaDescripcion.getText().toString().trim();
 
                 if(categoriaName.length()==0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.edit_category_dialog_empty_values_message), Toast.LENGTH_LONG).show();
+                    CustomToast(getApplicationContext(), getString(R.string.edit_category_dialog_empty_values_message), Toast.LENGTH_LONG);
                 }else{
                     editCategory(categoriaName,categoriaDescripcion,categoria);
                 }
@@ -189,6 +190,13 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void CustomToast(Context context, String mensaje, int duracion){
+        Toast toast = Toast.makeText(context, mensaje, duracion);
+        toast.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        toast.getView().setPadding(10,10,10,10);
+        toast.show();
     }
 
     private void scrollMyListViewToBottom() {
