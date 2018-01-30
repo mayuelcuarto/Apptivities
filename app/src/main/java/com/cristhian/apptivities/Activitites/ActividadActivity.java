@@ -297,7 +297,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 }
             }
         });
-        
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }
