@@ -4,16 +4,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,10 +26,12 @@ import com.cristhian.apptivities.Adapters.ActividadAdapter;
 import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
+import com.cristhian.apptivities.R;
 import com.cristhian.apptivities.Utils.MaskWatcher;
 import com.cristhian.apptivities.Utils.Util;
-import com.cristhian.apptivities.R;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -61,7 +64,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
     private void Constructor(){
         actividades.addChangeListener(this);
-
         adapter = new ActividadAdapter(this,actividades,R.layout.list_view_actividad_item);
         listView = (ListView) findViewById(R.id.listViewActividad);
         listView.setAdapter(adapter);
@@ -85,13 +87,16 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
     private void datosRealm(){
         realm = Realm.getDefaultInstance();
-
         actividades = realm
                 .where(Actividad.class)
                 .between("fechaIni", aux.todayFiltro(0, new Date()), aux.todayFiltro(1, new Date()))
                 .or()
                 .between("fechaFin", aux.todayFiltro(0, new Date()), aux.todayFiltro(1, new Date()))
                 .findAll();
+    }
+
+    private void datosActividades(){
+
     }
 
     private void datosCategorias(){
@@ -345,6 +350,9 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Intent intent = new Intent(ActividadActivity.this, CategoriaActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.menuRespaldo:
+                grabar();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -400,7 +408,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 getString(R.string.activity_activity_toast_fechaFin) + ": " + fechaFin + "\n" +
                 getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre + "\n" +
                 getString(R.string.activity_activity_toast_time) + ": " + mensaje,
-                Toast.LENGTH_LONG);
+                Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -423,5 +431,81 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 listView.setSelection(listView.getCount() - 1);
             }
         });
+    }
+
+    public void grabar() {
+        RealmResults<Actividad> actividadesBU;
+        RealmResults<Categoria> categoriasBU;
+
+        actividadesBU = realm
+                .where(Actividad.class)
+                .findAll();
+
+        categoriasBU = realm
+                .where(Categoria.class)
+                .findAll();
+
+        String fechaActual = aux.dateToString(new Date(), "ddMMyyyyHHmmss");
+        try {
+            File nuevaCarpeta = new File(Environment.getExternalStorageDirectory(), "Apptivities_Respaldo");
+            if (!nuevaCarpeta.exists()) {
+                nuevaCarpeta.mkdir();
+            }
+            try {
+                datosActividades();
+                datosCategorias();
+                File fileActividades = new File(nuevaCarpeta, "activitidades" + fechaActual + ".json");
+                fileActividades.createNewFile();
+                File fileCategorias = new File(nuevaCarpeta, "categorias" + fechaActual + ".json");
+                fileCategorias.createNewFile();
+
+                FileWriter fileWriter = new FileWriter(fileActividades);
+                fileWriter.write("[");
+                for(int i = 0; i<actividadesBU.size(); i++){
+                    fileWriter.write("{");
+                    fileWriter.write("\"id\": " + actividadesBU.get(i).getId() + ", ");
+                    fileWriter.write("\"descripcion\": " + "\"" + actividadesBU.get(i).getDescripcion() + "\", ");
+                    fileWriter.write("\"fechaIni\": " + "\"" + actividadesBU.get(i).getFechaIni() + "\", ");
+                    fileWriter.write("\"fechaFin\": " + "\"" + actividadesBU.get(i).getFechaFin() + "\", ");
+                    fileWriter.write("\"categoria\": " + actividadesBU.get(i).getCategoria());
+
+                    if(i==actividadesBU.size()-1){
+                        fileWriter.write("}");
+                    }else{
+                        fileWriter.write("},");
+                    }
+                }
+                fileWriter.write("]");
+                fileWriter.flush();
+                fileWriter.close();
+
+                FileWriter fileWriter2 = new FileWriter(fileCategorias);
+                fileWriter2.write("[");
+                for(int i = 0; i<categoriasBU.size(); i++){
+                    fileWriter2.write("{");
+                    fileWriter2.write("\"id\": " + categoriasBU.get(i).getId() + ", ");
+                    fileWriter2.write("\"name\": " + "\"" + categoriasBU.get(i).getName() + "\", ");
+                    fileWriter2.write("\"descripcion\": " + "\"" + categoriasBU.get(i).getDescripcion() + "\", ");
+                    fileWriter2.write("\"createAt\": " + "\"" + categoriasBU.get(i).getCreateAt() + "\"");
+
+                    if(i==categoriasBU.size()-1){
+                        fileWriter2.write("}");
+                    }else{
+                        fileWriter2.write("},");
+                    }
+                }
+                fileWriter2.write("]");
+                fileWriter2.flush();
+                fileWriter2.close();
+
+                Toast.makeText(this,"Respaldo exitoso!",Toast.LENGTH_SHORT).show();
+            } catch (Exception ex) {
+                Log.e("Error", "ex: " + ex);
+                Toast.makeText(this,"Error: " + ex,Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("Error", "e: " + e);
+            Toast.makeText(this,"Error: " + e,Toast.LENGTH_SHORT).show();
+        }
     }
 }

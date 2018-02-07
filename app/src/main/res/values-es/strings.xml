@@ -13,6 +13,7 @@
     <string name="activity_activity_list_menu_calendar">Calendario</string>
     <string name="activity_activity_list_menu_category">Categorías</string>
     <string name="activity_activity_list_menu_activity">Actividades</string>
+    <string name="activity_activity_list_menu_respaldo">Respaldo</string>
 
     <string name="new_category_dialog_title">Nueva Categoría</string>
     <string name="new_category_dialog_message">Assigna un nombre y opcionalmente una descripción para crear una nueva categoría</string>
