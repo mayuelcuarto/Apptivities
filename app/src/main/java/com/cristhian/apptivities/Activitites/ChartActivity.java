@@ -48,7 +48,7 @@ public class ChartActivity extends Activity {
             entradas.add(new BarEntry(i,cantidad, categorias.get(i).getName()));
         }
 
-        BarDataSet dataset = new BarDataSet(entradas,"Historial de actividades por categoría");
+        BarDataSet dataset = new BarDataSet(entradas,getString(R.string.activity_chart_dataset_label));
 
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
@@ -58,7 +58,7 @@ public class ChartActivity extends Activity {
         BarData datos = new BarData(dataset);
 
         Description description = new Description();
-        description.setText("El valor de las barras corresponde a la cantidad de actividades registradas");
+        description.setText(getString(R.string.activity_chart_description));
         grafica.setDescription(description);
 
         grafica.setData(datos);
@@ -85,7 +85,12 @@ public class ChartActivity extends Activity {
                 int id = (int) e.getX() + 1;
                 String categoria = categoriaxID(id);
                 String tiempo = calcularTiempoxCategoria(id);
-                Toast.makeText(getApplicationContext(), categoria + "\n" + tiempo, Toast.LENGTH_SHORT).show();
+                int cantidad = (int) cantidadactividadxcategoria(id);
+                Toast.makeText(getApplicationContext(),
+                        categoria + "\n" +
+                             getString(R.string.activity_chart_toast_accomplished) + " " + cantidad + " " + getString(R.string.activity_chart_toast_times) + "\n" +
+                                getString(R.string.activity_chart_toast_time) + " " + tiempo,
+                        Toast.LENGTH_LONG).show();
             }
 
             @Override

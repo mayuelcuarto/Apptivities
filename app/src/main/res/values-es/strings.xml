@@ -58,6 +58,13 @@
     <string name="activity_activity_toast_time">Tiempo</string>
     <string name="activity_activity_toast_category_empty">Vacío</string>
 
+    <string name="activity_chart_dataset_label">Historial de actividades por categoría</string>
+    <string name="activity_chart_description">Click en las barras para más detalle</string>
+
+    <string name="activity_chart_toast_accomplished">Realizado</string>
+    <string name="activity_chart_toast_times">veces</string>
+    <string name="activity_chart_toast_time">Tiempo invertido</string>
+
     <string name="util_restarFechas_days">días</string>
     <string name="util_restarFechas_minutes">minutos</string>
 </resources>
