@@ -8,8 +8,10 @@ import android.widget.Toast;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
+import com.cristhian.apptivities.Utils.Util;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -21,6 +23,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -29,6 +32,7 @@ public class ChartActivity extends Activity {
 
     private Realm realm;
     private RealmResults<Categoria> categorias;
+    private Util aux = new Util(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +50,6 @@ public class ChartActivity extends Activity {
 
         BarDataSet dataset = new BarDataSet(entradas,"Historial de actividades por categoría");
 
-        //Etiquetas para el eje X
-
-        ArrayList<String> etiquetas = new ArrayList<String>();
-        etiquetas.add("Enero");
-        etiquetas.add("Febrero");
-        etiquetas.add("Marzo");
-        etiquetas.add("Abril");
-        etiquetas.add("Mayo");
-        etiquetas.add("Junio");
-
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         setContentView(R.layout.activity_chart);
@@ -63,6 +57,9 @@ public class ChartActivity extends Activity {
 
         BarData datos = new BarData(dataset);
 
+        Description description = new Description();
+        description.setText("El valor de las barras corresponde a la cantidad de actividades registradas");
+        grafica.setDescription(description);
 
         grafica.setData(datos);
 
@@ -87,7 +84,8 @@ public class ChartActivity extends Activity {
             public void onValueSelected(Entry e, Highlight h) {
                 int id = (int) e.getX() + 1;
                 String categoria = categoriaxID(id);
-                Toast.makeText(getApplicationContext(), categoria, Toast.LENGTH_SHORT).show();
+                String tiempo = calcularTiempoxCategoria(id);
+                Toast.makeText(getApplicationContext(), categoria + "\n" + tiempo, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -119,5 +117,23 @@ public class ChartActivity extends Activity {
                 .equalTo("id",id)
                 .findFirst();
         return categorias2.getName();
+    }
+
+    private String calcularTiempoxCategoria(long categoria){
+        RealmResults<Actividad> actividades;
+        actividades = realm
+                .where(Actividad.class)
+                .equalTo("categoria",categoria)
+                .findAll();
+
+        int acumulado = 0;
+        for (Actividad item : actividades) {
+            Date fechaIni = item.getFechaIni();
+            Date fechaFin = item.getFechaFin();
+            int resta = aux.restarFechasNumero(fechaIni,fechaFin);
+            acumulado += resta;
+        }
+
+        return aux.convertirTiempo(acumulado);
     }
 }

@@ -396,7 +396,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
         String fechaIni = aux.dateToString(actividad.getFechaIni(), formatoComplejo);
         String fechaFin = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
-        String mensaje = aux.restarFechas(actividad.getFechaFin(), actividad.getFechaIni());
+        String mensaje = aux.restarFechas(actividad.getFechaIni(), actividad.getFechaFin());
 
         CustomToast(this,
                 getString(R.string.activity_activity_toast_title) +"\n" +

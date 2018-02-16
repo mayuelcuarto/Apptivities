@@ -77,9 +77,36 @@ public class Util {
     }
 
     public String restarFechas(Date fechaIni, Date fechaFin){
-        int diferencia = (int) (fechaIni.getTime() - fechaFin.getTime());
+        int diferencia = (int) (fechaFin.getTime() - fechaIni.getTime());
         String respuesta = "";
 
+        int minutos = diferencia/(1000*60);
+        int horas = diferencia/(1000*60*60);
+        int dias = diferencia/(1000*60*60*24);
+
+        if(minutos/60 >= 1){
+            int restominutos = minutos%60;
+            respuesta =  String.format("%02d",horas) + ":" + String.format("%02d",restominutos) ;
+
+            if(horas/24 >= 1){
+                int restohoras = horas%24;
+                respuesta =  dias + " " + context.getString(R.string.util_restarFechas_days) + " " + String.format("%02d",restohoras) + ":" + String.format("%02d",restominutos);
+            }
+
+        }else{
+            respuesta = minutos + " " + context.getString(R.string.util_restarFechas_minutes);
+        }
+
+        return respuesta;
+    }
+
+    public int restarFechasNumero(Date fechaIni, Date fechaFin){
+        int diferencia = (int) (fechaFin.getTime() - fechaIni.getTime());
+        return diferencia;
+    }
+
+    public String convertirTiempo(int diferencia){
+        String respuesta = "";
         int minutos = diferencia/(1000*60);
         int horas = diferencia/(1000*60*60);
         int dias = diferencia/(1000*60*60*24);
