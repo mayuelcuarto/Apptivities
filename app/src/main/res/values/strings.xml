@@ -4,6 +4,7 @@
 
     <string name="activity_activity_title">Activities</string>
     <string name="activity_category_title">Categories</string>
+    <string name="activity_chart_title">Graphics</string>
 
     <string name="activity_activity_context_menu_edit">Edit Activity</string>
     <string name="activity_activity_context_menu_delete">Delete Activity</string>
@@ -13,7 +14,8 @@
     <string name="activity_activity_list_menu_calendar">Calendar</string>
     <string name="activity_activity_list_menu_category">Categories</string>
     <string name="activity_activity_list_menu_activity">Activities</string>
-    <string name="activity_activity_list_menu_respaldo">BackUp</string>
+    <string name="activity_activity_list_menu_backup">BackUp</string>
+    <string name="activity_activity_list_menu_graphics">Graphics</string>
 
     <string name="new_category_dialog_title">New Category</string>
     <string name="new_category_dialog_message">Assign a name and optionally a description to create a new category</string>
@@ -58,4 +60,5 @@
 
     <string name="util_restarFechas_days">days</string>
     <string name="util_restarFechas_minutes">minutes</string>
+
 </resources>

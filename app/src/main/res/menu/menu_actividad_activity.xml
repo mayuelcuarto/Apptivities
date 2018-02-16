@@ -9,5 +9,8 @@
         android:title="@string/activity_activity_list_menu_category"/>
     <item
         android:id="@+id/menuRespaldo"
-        android:title="@string/activity_activity_list_menu_respaldo"/>
+        android:title="@string/activity_activity_list_menu_backup"/>
+    <item
+        android:id="@+id/menuGrafica"
+        android:title="@string/activity_activity_list_menu_graphics"/>
 </menu>
