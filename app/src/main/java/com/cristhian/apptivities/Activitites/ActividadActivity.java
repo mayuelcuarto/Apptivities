@@ -83,8 +83,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         registerForContextMenu(listView);
     }
 
-
-
     private void datosRealm(){
         realm = Realm.getDefaultInstance();
         actividades = realm
@@ -93,10 +91,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 .or()
                 .between("fechaFin", aux.todayFiltro(0, new Date()), aux.todayFiltro(1, new Date()))
                 .findAll();
-    }
-
-    private void datosActividades(){
-
     }
 
     private void datosCategorias(){
@@ -353,6 +347,10 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             case R.id.menuRespaldo:
                 grabar();
                 return true;
+            case R.id.menuGrafica:
+                Intent intent2 = new Intent(ActividadActivity.this, ChartActivity.class);
+                startActivity(intent2);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -452,8 +450,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 nuevaCarpeta.mkdir();
             }
             try {
-                datosActividades();
-                datosCategorias();
                 File fileActividades = new File(nuevaCarpeta, "activitidades" + fechaActual + ".json");
                 fileActividades.createNewFile();
                 File fileCategorias = new File(nuevaCarpeta, "categorias" + fechaActual + ".json");
