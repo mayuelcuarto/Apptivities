@@ -391,7 +391,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             }
         });
 
-        builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.search_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                  String actividadDescripcion = inputDescripcion.getText().toString().trim();
