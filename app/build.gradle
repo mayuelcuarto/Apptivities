@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.cristhian.apptivities"
         minSdkVersion 21
@@ -32,4 +32,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:23.4.0'
     testCompile 'junit:junit:4.12'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }

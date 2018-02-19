@@ -51,4 +51,8 @@ public class Categoria extends RealmObject{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
 }
