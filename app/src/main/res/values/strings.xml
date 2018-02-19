@@ -44,6 +44,11 @@
     <string name="delete_activity_dialog_positive_button">YES</string>
     <string name="delete_activity_dialog_negative_button">NO</string>
 
+    <string name="search_activity_dialog_title">Search Activity</string>
+    <string name="search_activity_dialog_message">Set a description to search and some dates if you wish</string>
+    <string name="search_activity_dialog_error_message">You must indicate at least the description to perform a search</string>
+    <string name="search_activity_title_mod">Search Mode</string>
+
     <string name="edit_category_dialog_title">Edit Category</string>
     <string name="edit_category_dialog_message">Modify the Category</string>
     <string name="edit_category_dialog_positive_button">Save</string>

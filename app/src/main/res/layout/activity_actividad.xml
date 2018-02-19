@@ -31,8 +31,17 @@
             android:layout_width="wrap_content"
             android:layout_gravity="bottom|right"
             android:src="@drawable/ic_add_fab"
-            android:layout_marginBottom="45dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginRight="15dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabSearchActividad"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/ic_search"
+                android:layout_marginBottom="80dp"
+                android:layout_marginRight="15dp"/>
 
         </FrameLayout>
 
