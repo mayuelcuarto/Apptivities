@@ -126,8 +126,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             actividades = realm
                     .where(Actividad.class)
                     .contains("descripcion", descripcion, Case.INSENSITIVE)
+                    .beginGroup()
                     .between("fechaIni", FechaIni, FechaFin)
+                    .or()
                     .between("fechaFin", FechaIni, FechaFin)
+                    .endGroup()
                     .findAll();
         }else{
             actividades = realm
@@ -384,9 +387,13 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
                     inputActividadFechaIni.setText(aux.dateToString(new Date(), formatoSimple));
                     inputActividadFechaFin.setText(aux.dateToString(new Date(), formatoSimple));
+
+                    inputActividadFechaIni.requestFocus();
                 }else{
                     inputActividadFechaIni.setEnabled(false);
                     inputActividadFechaFin.setEnabled(false);
+
+                    inputDescripcion.requestFocus();
                 }
             }
         });
