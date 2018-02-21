@@ -13,6 +13,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -371,11 +372,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
         final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextSearchDescription);
 
-        final EditText inputActividadFechaIni = (EditText) viewInflated.findViewById(R.id.editTextSearchActividadFechaIni);
-        inputActividadFechaIni.addTextChangedListener(new MaskWatcher("##/##/####"));
+        final DatePicker inputActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaIni);
+        inputActividadFechaIni.setEnabled(false);
 
-        final EditText inputActividadFechaFin = (EditText) viewInflated.findViewById(R.id.editTextSearchActividadFechaFin);
-        inputActividadFechaFin.addTextChangedListener(new MaskWatcher("##/##/####"));
+        final DatePicker inputActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaFin);
+        inputActividadFechaFin.setEnabled(false);
 
         final Switch switchFechas = (Switch) viewInflated.findViewById(R.id.switchSearch);
         switchFechas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -384,9 +385,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 if(isChecked){
                     inputActividadFechaIni.setEnabled(true);
                     inputActividadFechaFin.setEnabled(true);
-
-                    inputActividadFechaIni.setText(aux.dateToString(new Date(), formatoSimple));
-                    inputActividadFechaFin.setText(aux.dateToString(new Date(), formatoSimple));
 
                     inputActividadFechaIni.requestFocus();
                 }else{
@@ -403,8 +401,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     public void onClick(DialogInterface dialog, int which) {
                  String actividadDescripcion = inputDescripcion.getText().toString().trim();
 
-                 String actividadFechaIni = inputActividadFechaIni.getText().toString().trim() + " 00:00";
-                 String actividadFechaFin = inputActividadFechaFin.getText().toString().trim() + " 23:59";
+                 String actividadFechaIni =  inputActividadFechaIni.getDayOfMonth() + "/" + (inputActividadFechaIni.getMonth()+1) + "/" + inputActividadFechaIni.getYear() + " 00:00";
+                 String actividadFechaFin = inputActividadFechaFin.getDayOfMonth() + "/" + (inputActividadFechaFin.getMonth()+1) + "/" + inputActividadFechaFin.getYear() + " 23:59";
                  Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                  Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
                  if(actividadDescripcion.length()==0){

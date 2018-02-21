@@ -50,6 +50,8 @@
     <string name="search_activity_switch_message">Filtro de fechas</string>
     <string name="search_activity_title_mod">Modo Búsqueda</string>
     <string name="search_activity_dialog_positive_button">Buscar</string>
+    <string name="search_activity_fechaIni_label">Inicio</string>
+    <string name="search_activity_fechaFin_label">Fin</string>
 
     <string name="edit_category_dialog_title">Editar Categoría</string>
     <string name="edit_category_dialog_message">Modifica la Categoría</string>
