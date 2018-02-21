@@ -44,6 +44,15 @@
     <string name="delete_activity_dialog_positive_button">SI</string>
     <string name="delete_activity_dialog_negative_button">NO</string>
 
+    <string name="search_activity_dialog_title">Buscar Actividad</string>
+    <string name="search_activity_dialog_message">Indica una descripción y algunas fechas si deseas</string>
+    <string name="search_activity_dialog_error_message">Debes indicar al menos la descripción para realizar una búsqueda</string>
+    <string name="search_activity_switch_message">Filtro de fechas</string>
+    <string name="search_activity_title_mod">Modo Búsqueda</string>
+    <string name="search_activity_dialog_positive_button">Buscar</string>
+    <string name="search_activity_fechaIni_label">Inicio</string>
+    <string name="search_activity_fechaFin_label">Fin</string>
+
     <string name="edit_category_dialog_title">Editar Categoría</string>
     <string name="edit_category_dialog_message">Modifica la Categoría</string>
     <string name="edit_category_dialog_positive_button">Guardar</string>

@@ -13,12 +13,15 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -47,6 +51,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private ActividadAdapter adapter;
     private CategoriaSpinnerAdapter adapter2;
     private FloatingActionButton fab;
+    private FloatingActionButton sfab;
     private static String formatoHora = "HH";
     private static String formatoMinuto = "mm";
     private static String formatoSimple = "dd/MM/yyyy";
@@ -79,6 +84,16 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             }
         });
 
+        sfab = (FloatingActionButton) findViewById(R.id.fabSearchActividad);
+        sfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertForSearchActividad(
+                        getString(R.string.search_activity_dialog_title),
+                        getString(R.string.search_activity_dialog_message));
+            }
+        });
+
         scrollMyListViewToBottom();
         registerForContextMenu(listView);
     }
@@ -105,6 +120,26 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 .equalTo("id", id)
                 .findFirst();
         return categoria;
+    }
+
+    private void actividadesXdescripcion(String descripcion, boolean filtroFechas, Date FechaIni, Date FechaFin){
+        if(filtroFechas){
+            actividades = realm
+                    .where(Actividad.class)
+                    .contains("descripcion", descripcion, Case.INSENSITIVE)
+                    .beginGroup()
+                    .between("fechaIni", FechaIni, FechaFin)
+                    .or()
+                    .between("fechaFin", FechaIni, FechaFin)
+                    .endGroup()
+                    .findAll();
+        }else{
+            actividades = realm
+                    .where(Actividad.class)
+                    .contains("descripcion", descripcion, Case.INSENSITIVE)
+                    .findAll();
+        }
+
     }
 
     private void createNewActivity(String descripcion, String fechaIni, String fechaFin, long categoria) {
@@ -318,6 +353,65 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteActividad(actividad);
+                    }
+                }
+        );
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showAlertForSearchActividad(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        if(title != null) builder.setTitle(title);
+        if(message != null) builder.setMessage(message);
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_search_actividad, null);
+        builder.setView(viewInflated);
+
+        final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextSearchDescription);
+
+        final DatePicker inputActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaIni);
+        inputActividadFechaIni.setEnabled(false);
+
+        final DatePicker inputActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaFin);
+        inputActividadFechaFin.setEnabled(false);
+
+        final Switch switchFechas = (Switch) viewInflated.findViewById(R.id.switchSearch);
+        switchFechas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    inputActividadFechaIni.setEnabled(true);
+                    inputActividadFechaFin.setEnabled(true);
+
+                    inputActividadFechaIni.requestFocus();
+                }else{
+                    inputActividadFechaIni.setEnabled(false);
+                    inputActividadFechaFin.setEnabled(false);
+
+                    inputDescripcion.requestFocus();
+                }
+            }
+        });
+
+        builder.setPositiveButton(getString(R.string.search_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                 String actividadDescripcion = inputDescripcion.getText().toString().trim();
+
+                 String actividadFechaIni =  inputActividadFechaIni.getDayOfMonth() + "/" + (inputActividadFechaIni.getMonth()+1) + "/" + inputActividadFechaIni.getYear() + " 00:00";
+                 String actividadFechaFin = inputActividadFechaFin.getDayOfMonth() + "/" + (inputActividadFechaFin.getMonth()+1) + "/" + inputActividadFechaFin.getYear() + " 23:59";
+                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
+                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
+                 if(actividadDescripcion.length()==0){
+                     CustomToast(getApplicationContext(),getString(R.string.search_activity_dialog_error_message), Toast.LENGTH_SHORT);
+                 }else{
+                     actividadesXdescripcion(actividadDescripcion,switchFechas.isChecked(),fechaIniTemp,fechaFinTemp);
+                     Constructor();
+                     setTitle(getString(R.string.activity_activity_title) + ": " + getString(R.string.search_activity_title_mod));
+                 }
                     }
                 }
         );
