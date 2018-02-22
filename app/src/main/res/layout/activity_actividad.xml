@@ -17,32 +17,40 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-        <ListView
-            android:id="@+id/listViewActividad"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/colorPrimary"
-            android:dividerHeight="1dp"
-            />
+            <ListView
+                android:id="@+id/listViewActividad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/colorPrimary"
+                android:dividerHeight="1dp"
+                />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAddActividad"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:src="@drawable/ic_add_fab"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="15dp"/>
-
-        <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabSearchActividad"
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabCalendar"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_gravity="bottom|right"
-                android:src="@drawable/ic_search"
-                android:layout_marginBottom="80dp"
+                android:src="@drawable/ic_calendar"
+                android:layout_marginBottom="145dp"
                 android:layout_marginRight="15dp"/>
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabSearchActividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="80dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_search"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabAddActividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_add_fab"/>
         </FrameLayout>
 
     </LinearLayout>

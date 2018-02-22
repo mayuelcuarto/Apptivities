@@ -1,5 +1,7 @@
 package com.cristhian.apptivities.Activitites;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +15,6 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -35,6 +36,7 @@ import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Case;
@@ -52,11 +54,14 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private CategoriaSpinnerAdapter adapter2;
     private FloatingActionButton fab;
     private FloatingActionButton sfab;
+    private FloatingActionButton cfab;
     private static String formatoHora = "HH";
     private static String formatoMinuto = "mm";
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
     private Util aux = new Util(this);
+
+    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,16 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 showAlertForSearchActividad(
                         getString(R.string.search_activity_dialog_title),
                         getString(R.string.search_activity_dialog_message));
+            }
+        });
+
+        cfab = (FloatingActionButton) findViewById(R.id.fabCalendar);
+        cfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //showCalendar("", "");
+                showDatePickerDialog();
+                datePickerDialog.show();
             }
         });
 
@@ -428,12 +443,33 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void showDatePickerDialog() {
+        final Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this,R.style.CalendarTheme,
+                new OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        final Calendar newDate = Calendar.getInstance();
+                        newDate.set(year, monthOfYear, dayOfMonth);
+
+                        String fechaCal =  String.valueOf(newDate.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(newDate.get(Calendar.MONTH) + 1) + "/" + String.valueOf(newDate.get(Calendar.YEAR));
+
+                        actividades = realm
+                                .where(Actividad.class)
+                                .between("fechaIni", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
+                                .or()
+                                .between("fechaFin", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
+                                .findAll();
+                        String fechaTitulo = aux.dateToString(aux.stringSimpleToDate(0,fechaCal,formatoSimple),formatoSimple);
+                        setTitle(getString(R.string.activity_activity_title) + ": " + fechaTitulo);
+                        Constructor();
+                    }
+                }
+                ,newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.verCalendario:
-                showCalendar("", "");
-                return true;
             case R.id.menuCategory:
                 Intent intent = new Intent(ActividadActivity.this, CategoriaActivity.class);
                 startActivity(intent);

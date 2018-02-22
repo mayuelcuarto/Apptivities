@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/verCalendario"
-        android:title="@string/activity_activity_list_menu_calendar"/>
-
-    <item
         android:id="@+id/menuCategory"
         android:title="@string/activity_activity_list_menu_category"/>
     <item
