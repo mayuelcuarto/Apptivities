@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="bottom|right"
                 android:src="@drawable/ic_add_fab"
-                android:layout_marginBottom="45dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="15dp"/>
 
         </FrameLayout>

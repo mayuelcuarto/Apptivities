@@ -16,17 +16,23 @@
     </style>
 
     <style name="MyTimePickerWidgetStyle" parent="@android:style/Widget.Material.TimePicker">
-        <item name="android:background">#ffffff</item>
-        <item name="android:textSize">10dp</item>
         <item name="android:padding">0dp</item>
         <item name="android:layout_margin">0dp</item>
     </style>
 
     <style name="MyDatePickerWidgetStyle" parent="@android:style/Widget.Material.DatePicker">
-        <item name="android:background">#ffffff</item>
-        <item name="android:textSize">10dp</item>
         <item name="android:padding">0dp</item>
         <item name="android:layout_margin">0dp</item>
         <item name="android:calendarViewShown">false</item>
+    </style>
+
+    <style name="MyCalendarStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:theme">@style/CalendarTheme</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:calendarViewShown">true</item>
+        <item name="android:spinnersShown">false</item>
     </style>
 </resources>

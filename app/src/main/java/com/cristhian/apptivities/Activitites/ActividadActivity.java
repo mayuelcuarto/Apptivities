@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CalendarView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -62,6 +65,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private Util aux = new Util(this);
 
     private DatePickerDialog datePickerDialog;
+    private Date fechaSeleccionada = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +107,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         cfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showCalendar("", "");
-                showDatePickerDialog();
-                datePickerDialog.show();
+                showCalendar();
+                //showDatePickerDialog();
             }
         });
 
@@ -185,33 +188,30 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         realm.commitTransaction();
     }
 
-    private void showCalendar(String title, String message){
+    private void showCalendar(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.date_pick_calendar, null);
         builder.setView(viewInflated);
 
         final DatePicker calendar = (DatePicker) viewInflated.findViewById(R.id.datePicker);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        calendar.getCalendarView().setDate(fechaSeleccionada.getTime());
+        calendar.getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String fechaCal =  String.valueOf(calendar.getDayOfMonth()) + "/" + String.valueOf(calendar.getMonth() + 1) + "/" + String.valueOf(calendar.getYear());
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                String fechaCal =  String.valueOf(dayOfMonth) + "/" + String.valueOf(month + 1) + "/" + String.valueOf(year);
 
                 actividades = realm
                         .where(Actividad.class)
-                        .between("fechaIni", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
+                        .between("fechaIni", aux.stringSimpleToDate(0, fechaCal, formatoComplejo), aux.stringSimpleToDate(1, fechaCal, formatoComplejo))
                         .or()
-                        .between("fechaFin", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
+                        .between("fechaFin", aux.stringSimpleToDate(0, fechaCal, formatoComplejo), aux.stringSimpleToDate(1, fechaCal, formatoComplejo))
                         .findAll();
-                String fechaTitulo = aux.dateToString(aux.stringSimpleToDate(0,fechaCal,formatoSimple),formatoSimple);
+                String fechaTitulo = aux.dateToString(aux.stringSimpleToDate(0, fechaCal, formatoSimple), formatoSimple);
                 setTitle(getString(R.string.activity_activity_title) + ": " + fechaTitulo);
+                fechaSeleccionada = aux.stringToDate(fechaCal, formatoSimple);
                 Constructor();
             }
         });
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -377,7 +377,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     }
 
     private void showAlertForSearchActividad(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         if(title != null) builder.setTitle(title);
         if(message != null) builder.setMessage(message);
@@ -401,12 +401,18 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     inputActividadFechaIni.setEnabled(true);
                     inputActividadFechaFin.setEnabled(true);
 
-                    inputActividadFechaIni.requestFocus();
+                    inputDescripcion.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(inputDescripcion.getWindowToken(), 0);
+                    inputActividadFechaIni.getChildAt(0).requestFocus();
+                    imm.showSoftInput(inputActividadFechaIni.getChildAt(0), InputMethodManager.SHOW_IMPLICIT);
                 }else{
                     inputActividadFechaIni.setEnabled(false);
                     inputActividadFechaFin.setEnabled(false);
 
                     inputDescripcion.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(inputDescripcion, InputMethodManager.SHOW_IMPLICIT);
                 }
             }
         });
@@ -430,8 +436,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     }
                 }
         );
-
         AlertDialog dialog = builder.create();
+        fechaSeleccionada = new Date();
         dialog.show();
     }
 
@@ -465,6 +471,13 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     }
                 }
                 ,newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Toast.makeText(getApplicationContext(), "Probando evento de cambio de fechas", Toast.LENGTH_SHORT).show();
+            }
+        });
+        datePickerDialog.show();
     }
 
     @Override

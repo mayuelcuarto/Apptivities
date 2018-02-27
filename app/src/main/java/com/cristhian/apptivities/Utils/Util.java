@@ -44,7 +44,7 @@ public class Util {
         String cadena = formatoDelTexto.format(fecha);
         String cadena2 = "";
         if(caso == 0){
-            cadena2 = cadena + " 00:00:01";
+            cadena2 = cadena + " 00:00:00";
         }else if(caso == 1) {
             cadena2 = cadena + " 24:00:00";
         }
@@ -63,7 +63,7 @@ public class Util {
         String cadena2 = "";
 
         if(caso == 0){
-            cadena2 = fechaString + " 00:00:01";
+            cadena2 = fechaString + " 00:00:00";
         }else if(caso == 1) {
             cadena2 = fechaString + " 24:00:00";
         }
