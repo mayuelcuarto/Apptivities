@@ -35,6 +35,7 @@ import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
 import com.cristhian.apptivities.Utils.MaskWatcher;
+import com.cristhian.apptivities.Utils.RealmBackupRestore;
 import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
@@ -63,6 +64,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
     private Util aux = new Util(this);
+    private RealmBackupRestore rbur= new RealmBackupRestore(this);
 
     private DatePickerDialog datePickerDialog;
     private Date fechaSeleccionada = new Date();
@@ -487,12 +489,20 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Intent intent = new Intent(ActividadActivity.this, CategoriaActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.menuRespaldo:
-                grabar();
-                return true;
+
             case R.id.menuGrafica:
                 Intent intent2 = new Intent(ActividadActivity.this, ChartActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.menuRespaldo:
+                rbur.backup();
+                return true;
+            case R.id.menuRestaurar:
+                rbur.restore();
+                realm.close();
+                datosRealm();
+                setTitle(getString(R.string.activity_activity_title) + ": " + aux.dateToString(new Date(), formatoSimple));
+                Constructor();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

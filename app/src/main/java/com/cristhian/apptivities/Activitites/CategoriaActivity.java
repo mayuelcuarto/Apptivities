@@ -2,11 +2,10 @@ package com.cristhian.apptivities.Activitites;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,17 +14,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.cristhian.apptivities.Adapters.ActividadAdapter;
 import com.cristhian.apptivities.Adapters.CategoriaAdapter;
-import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
-import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
-
-import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;

@@ -15,6 +15,7 @@
     <string name="activity_activity_list_menu_category">Categories</string>
     <string name="activity_activity_list_menu_activity">Activities</string>
     <string name="activity_activity_list_menu_backup">BackUp</string>
+    <string name="activity_activity_list_menu_restore">Restore</string>
     <string name="activity_activity_list_menu_graphics">Graphics</string>
 
     <string name="new_category_dialog_title">New Category</string>
@@ -66,6 +67,9 @@
     <string name="activity_activity_toast_category">Category</string>
     <string name="activity_activity_toast_time">Time</string>
     <string name="activity_activity_toast_category_empty">Empty</string>
+
+    <string name="activity_activity_toast_backup">Backup successful!</string>
+    <string name="activity_activity_toast_restore">Data restored!</string>
 
     <string name="activity_chart_dataset_label">Activity history by category</string>
     <string name="activity_chart_description">Click on the bars for more detail</string>

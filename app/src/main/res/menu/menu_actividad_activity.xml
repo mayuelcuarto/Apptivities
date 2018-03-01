@@ -4,9 +4,12 @@
         android:id="@+id/menuCategory"
         android:title="@string/activity_activity_list_menu_category"/>
     <item
+        android:id="@+id/menuGrafica"
+        android:title="@string/activity_activity_list_menu_graphics"/>
+    <item
         android:id="@+id/menuRespaldo"
         android:title="@string/activity_activity_list_menu_backup"/>
     <item
-        android:id="@+id/menuGrafica"
-        android:title="@string/activity_activity_list_menu_graphics"/>
+        android:id="@+id/menuRestaurar"
+        android:title="@string/activity_activity_list_menu_restore" />
 </menu>

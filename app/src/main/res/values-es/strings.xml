@@ -14,7 +14,8 @@
     <string name="activity_activity_list_menu_calendar">Calendario</string>
     <string name="activity_activity_list_menu_category">Categorías</string>
     <string name="activity_activity_list_menu_activity">Actividades</string>
-    <string name="activity_activity_list_menu_backup">Respaldo</string>
+    <string name="activity_activity_list_menu_backup">Respaldar</string>
+    <string name="activity_activity_list_menu_restore">Restaurar</string>
     <string name="activity_activity_list_menu_graphics">Gráficos</string>
 
     <string name="new_category_dialog_title">Nueva Categoría</string>
@@ -66,6 +67,9 @@
     <string name="activity_activity_toast_category">Categoría</string>
     <string name="activity_activity_toast_time">Tiempo</string>
     <string name="activity_activity_toast_category_empty">Vacío</string>
+
+    <string name="activity_activity_toast_backup">Respaldo exitoso!</string>
+    <string name="activity_activity_toast_restore">Data restaurada!</string>
 
     <string name="activity_chart_dataset_label">Historial de actividades por categoría</string>
     <string name="activity_chart_description">Click en las barras para más detalle</string>
