@@ -69,9 +69,9 @@
     <string name="activity_activity_toast_category_empty">Empty</string>
 
     <string name="activity_activity_dialog_backup_title">Generate backup?</string>
-    <string name="activity_activity_dialog_backup_message">This operation will create a copy of the data in the folder:\n\n\'DOWNLOADS\'</string>
+    <string name="activity_activity_dialog_backup_message">This operation will create a copy of the data in the folder:\n\nDOWNLOADS</string>
     <string name="activity_activity_dialog_restore_title">Restore data?</string>
-    <string name="activity_activity_dialog_restore_message">Make sure you have a copy of the data in the folder:\n\n\'DOWNLOADS\'</string>
+    <string name="activity_activity_dialog_restore_message">Make sure you have a copy of the data in the folder:\n\nDOWNLOADS</string>
 
     <string name="activity_activity_toast_backup">Backup successful!</string>
     <string name="activity_activity_toast_restore">Data restored!</string>

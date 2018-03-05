@@ -1,76 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editTextNewActividadDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
         android:hint="@string/new_activity_dialog_textView_description_hint"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="0dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:layout_margin="0dp"
-            android:orientation="horizontal"
-            android:padding="0dp">
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextNewActividadFechaIni"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:maxLength="10"
-                android:layout_gravity="center"
-                android:hint="dd/mm/yyyy"
-                android:inputType="date" />
+                android:orientation="vertical">
 
-            <TimePicker
-                android:id="@+id/timePickerNewActividadFechaIni"
-                style="@style/MyTimePickerWidgetStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="0dp"
-                android:alwaysDrawnWithCache="false"
-                android:timePickerMode="spinner" />
+                <EditText
+                    android:id="@+id/editTextNewActividadFechaIni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="dd/mm/yyyy"
+                    android:inputType="date"
+                    android:maxLength="10" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/search_activity_fechaIni_label"/>
+
+            </LinearLayout>
+                <TimePicker
+                    android:id="@+id/timePickerNewActividadFechaIni"
+                    style="@style/MyTimePickerWidgetStyle" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:padding="0dp"
-            android:layout_margin="0dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextNewActividadFechaFin"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:maxLength="10"
-                android:layout_gravity="center"
-                android:hint="dd/mm/yyyy"
-                android:inputType="date"/>
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextNewActividadFechaFin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="dd/mm/yyyy"
+                    android:inputType="date"
+                    android:maxLength="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/search_activity_fechaFin_label"/>
+
+            </LinearLayout>
 
             <TimePicker
-            android:id="@+id/timePickerNewActividadFechaFin"
-            style="@style/MyTimePickerWidgetStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner" />
+                android:id="@+id/timePickerNewActividadFechaFin"
+                style="@style/MyTimePickerWidgetStyle" />
 
         </LinearLayout>
 
