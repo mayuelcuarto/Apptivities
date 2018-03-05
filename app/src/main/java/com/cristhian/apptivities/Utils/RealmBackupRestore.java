@@ -37,11 +37,11 @@ public class RealmBackupRestore {
             exportRealmFile.delete();
 
             realm.writeCopyTo(exportRealmFile);
-            Toast.makeText(context,context.getString(R.string.activity_activity_toast_backup),Toast.LENGTH_SHORT).show();
+            CustomToast(context, context.getString(R.string.activity_activity_toast_backup), Toast.LENGTH_SHORT);
 
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context,"Error: " + e,Toast.LENGTH_SHORT).show();
+            CustomToast(context, "Error: " + e, Toast.LENGTH_SHORT);
         }
 
         realm.close();
@@ -51,7 +51,7 @@ public class RealmBackupRestore {
         String restoreFilePath = EXPORT_REALM_PATH + "/" + context.getString(R.string.app_name) + ".realm";
 
         copyBundledRealmFile(restoreFilePath, IMPORT_REALM_FILE_NAME);
-        Toast.makeText(context,context.getString(R.string.activity_activity_toast_restore),Toast.LENGTH_SHORT).show();
+        CustomToast(context, context.getString(R.string.activity_activity_toast_restore), Toast.LENGTH_SHORT);
     }
 
     private String copyBundledRealmFile(String oldFilePath, String outFileName) {
@@ -77,5 +77,12 @@ public class RealmBackupRestore {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void CustomToast(Context context, String mensaje, int duracion){
+        Toast toast = Toast.makeText(context, mensaje, duracion);
+        toast.getView().setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        toast.getView().setPadding(10,10,10,10);
+        toast.show();
     }
 }
