@@ -11,8 +11,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -35,10 +38,12 @@ import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
 import com.cristhian.apptivities.Utils.MaskWatcher;
+import com.cristhian.apptivities.Utils.RealmBackupRestore;
 import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.BatchUpdateException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,6 +68,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private static String formatoSimple = "dd/MM/yyyy";
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
     private Util aux = new Util(this);
+    private RealmBackupRestore rbur= new RealmBackupRestore(this);
 
     private DatePickerDialog datePickerDialog;
     private Date fechaSeleccionada = new Date();
@@ -107,7 +113,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         cfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCalendar();
+                showCalendar(getString(R.string.activity_activity_list_menu_calendar));
                 //showDatePickerDialog();
             }
         });
@@ -188,8 +194,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         realm.commitTransaction();
     }
 
-    private void showCalendar(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    private void showCalendar(String title){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.date_pick_calendar, null);
         builder.setView(viewInflated);
 
@@ -212,16 +218,20 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Constructor();
             }
         });
+        Context mContext = builder.getContext();
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
+        View mView = mLayoutInflater.inflate(R.layout.dialog_calendar_title, null);
+        if(title != null) {
+            TextView mTextView = (TextView) mView.findViewById(R.id.textViewTitleCalendar);
+            mTextView.setText(title);
+            builder.setCustomTitle(mView);
+        }
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void showAlertForCreatingActividad(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_actividad, null);
         builder.setView(viewInflated);
 
@@ -273,16 +283,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         }
         );
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        CustomTitleAndShow(builder,R.layout.dialog_create_activity_title,R.id.textViewTitleCreate,title,message);
     }
 
     private void showAlertForEditingActividad(String title, String message, final Actividad actividad){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_actividad, null);
         builder.setView(viewInflated);
 
@@ -346,24 +351,17 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 }
             }
         });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        CustomTitleAndShow(builder,R.layout.dialog_edit_activity_title,R.id.textViewTitleEdit,title,message);
     }
 
     private void showAlertForDeletingActividad(String title, String message, final Actividad actividad){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         builder.setPositiveButton(getString(R.string.delete_activity_dialog_negative_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-
         builder.setNegativeButton(getString(R.string.delete_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -371,17 +369,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     }
                 }
         );
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        CustomTitleAndShow(builder,R.layout.dialog_delete_activity_title,R.id.textViewTitleDelete,title,message);
     }
 
     private void showAlertForSearchActividad(String title, String message){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_search_actividad, null);
         builder.setView(viewInflated);
 
@@ -436,8 +428,63 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     }
                 }
         );
-        AlertDialog dialog = builder.create();
         fechaSeleccionada = new Date();
+        CustomTitleAndShow(builder,R.layout.dialog_search_actividad_title,R.id.textViewTitleSearch,title,message);
+    }
+
+    private void showAlertForBackup(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
+        builder.setPositiveButton(getString(R.string.delete_activity_dialog_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton(getString(R.string.delete_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        rbur.backup();
+                    }
+                }
+        );
+        CustomTitleAndShow(builder,R.layout.dialog_backup,R.id.textViewBackUpTitle,title,message);
+    }
+
+    private void showAlertForRestore(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
+        builder.setPositiveButton(getString(R.string.delete_activity_dialog_negative_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.delete_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        rbur.restore();
+                        realm.close();
+                        datosRealm();
+                        setTitle(getString(R.string.activity_activity_title) + ": " + aux.dateToString(new Date(), formatoSimple));
+                        Constructor();
+                    }
+                }
+        );
+
+        CustomTitleAndShow(builder,R.layout.dialog_restore,R.id.textViewRestoreTitle,title,message);
+    }
+
+    private void CustomTitleAndShow(AlertDialog.Builder builder, int layout, int textView, String title, String message){
+        Context mContext = builder.getContext();
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
+        View mView = mLayoutInflater.inflate(layout, null);
+        if(title != null) {
+            TextView mTextView = (TextView) mView.findViewById(textView);
+            mTextView.setText(title);
+            builder.setCustomTitle(mView);
+        }
+        if(message != null) builder.setMessage(message);
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
@@ -449,37 +496,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void showDatePickerDialog() {
-        final Calendar newCalendar = Calendar.getInstance();
-        datePickerDialog = new DatePickerDialog(this,R.style.CalendarTheme,
-                new OnDateSetListener() {
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        final Calendar newDate = Calendar.getInstance();
-                        newDate.set(year, monthOfYear, dayOfMonth);
-
-                        String fechaCal =  String.valueOf(newDate.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(newDate.get(Calendar.MONTH) + 1) + "/" + String.valueOf(newDate.get(Calendar.YEAR));
-
-                        actividades = realm
-                                .where(Actividad.class)
-                                .between("fechaIni", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
-                                .or()
-                                .between("fechaFin", aux.stringSimpleToDate(0,fechaCal, formatoComplejo), aux.stringSimpleToDate(1,fechaCal, formatoComplejo))
-                                .findAll();
-                        String fechaTitulo = aux.dateToString(aux.stringSimpleToDate(0,fechaCal,formatoSimple),formatoSimple);
-                        setTitle(getString(R.string.activity_activity_title) + ": " + fechaTitulo);
-                        Constructor();
-                    }
-                }
-                ,newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().getCalendarView().setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Toast.makeText(getApplicationContext(), "Probando evento de cambio de fechas", Toast.LENGTH_SHORT).show();
-            }
-        });
-        datePickerDialog.show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -487,12 +503,15 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Intent intent = new Intent(ActividadActivity.this, CategoriaActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.menuRespaldo:
-                grabar();
-                return true;
             case R.id.menuGrafica:
                 Intent intent2 = new Intent(ActividadActivity.this, ChartActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.menuRespaldo:
+                showAlertForBackup(getString(R.string.activity_activity_dialog_backup_title), getString(R.string.activity_activity_dialog_backup_message));
+                return true;
+            case R.id.menuRestaurar:
+                showAlertForRestore(getString(R.string.activity_activity_dialog_restore_title), getString(R.string.activity_activity_dialog_restore_message));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -502,7 +521,12 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(actividades.get(info.position).getDescripcion());
+        Context mContext = getApplicationContext();
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
+        View mView = mLayoutInflater.inflate(R.layout.context_menu_activity_title, null);
+        TextView mTextView = (TextView) mView.findViewById(R.id.textViewTitleContext);
+        mTextView.setText(actividades.get(info.position).getDescripcion());
+        menu.setHeaderView(mView);
         getMenuInflater().inflate(R.menu.context_menu_actividad_activity, menu);
     }
 

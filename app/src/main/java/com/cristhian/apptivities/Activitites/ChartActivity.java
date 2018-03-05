@@ -2,7 +2,6 @@ package com.cristhian.apptivities.Activitites;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cristhian.apptivities.Models.Actividad;

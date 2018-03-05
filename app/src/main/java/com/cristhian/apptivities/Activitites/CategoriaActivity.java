@@ -2,11 +2,10 @@ package com.cristhian.apptivities.Activitites;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,17 +14,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cristhian.apptivities.Adapters.ActividadAdapter;
 import com.cristhian.apptivities.Adapters.CategoriaAdapter;
-import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
-import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
-
-import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -95,11 +89,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
     }
 
     private void showAlertForCreatingCategoria(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        if(title != null) builder.setTitle(title);
-        if(message != null) builder.setMessage(message);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_create_categoria, null);
         builder.setView(viewInflated);
 
@@ -119,13 +109,11 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 }
             }
         });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        CustomTitleAndShow(builder, R.layout.dialog_create_category_title, R.id.textViewTitleCreateCategory, title, message);
     }
 
     private void showAlertForEditingCategoria(String title, String message, final Categoria categoria){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
 
         if(title != null) builder.setTitle(title);
         if(message != null) builder.setMessage(message);
@@ -152,7 +140,19 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 }
             }
         });
+        CustomTitleAndShow(builder, R.layout.dialog_edit_category_title, R.id.textViewTitleEditCategory, title, message);
+    }
 
+    private void CustomTitleAndShow(AlertDialog.Builder builder, int layout, int textView, String title, String message){
+        Context mContext = builder.getContext();
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
+        View mView = mLayoutInflater.inflate(layout, null);
+        if(title != null) {
+            TextView mTextView = (TextView) mView.findViewById(textView);
+            mTextView.setText(title);
+            builder.setCustomTitle(mView);
+        }
+        if(message != null) builder.setMessage(message);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -164,7 +164,12 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
 
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(categorias.get(info.position).getName());
+        Context mContext = getApplicationContext();
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mContext);
+        View mView = mLayoutInflater.inflate(R.layout.context_menu_activity_title, null);
+        TextView mTextView = (TextView) mView.findViewById(R.id.textViewTitleContext);
+        mTextView.setText(categorias.get(info.position).getName());
+        menu.setHeaderView(mView);
         getMenuInflater().inflate(R.menu.context_menu_categoria_activity, menu);
     }
 
