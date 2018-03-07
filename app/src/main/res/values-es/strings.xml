@@ -69,9 +69,9 @@
     <string name="activity_activity_toast_category_empty">Vacío</string>
 
     <string name="activity_activity_dialog_backup_title">¿Generar respaldo?</string>
-    <string name="activity_activity_dialog_backup_message">Esta operación creará una copia de la data en la carpeta:\n\nDOWNLOADS</string>
+    <string name="activity_activity_dialog_backup_message">Esta operación creará una copia de la data en la carpeta:\n\nDOWNLOAD</string>
     <string name="activity_activity_dialog_restore_title">¿Restaurar data?</string>
-    <string name="activity_activity_dialog_restore_message">Asegúrese de tener una copia de la data en la carpeta:\n\nDOWNLOADS</string>
+    <string name="activity_activity_dialog_restore_message">Asegúrese de tener una copia de la data en la carpeta:\n\nDOWNLOAD</string>
 
     <string name="activity_activity_toast_backup">Respaldo exitoso!</string>
     <string name="activity_activity_toast_restore">Data restaurada!</string>
