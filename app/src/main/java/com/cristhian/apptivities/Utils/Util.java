@@ -108,25 +108,24 @@ public class Util {
         return diferencia;
     }
 
-    public String convertirTiempo(int diferencia){
+    public String convertirTiempo(long diferencia){
         String respuesta = "";
-        int minutos = diferencia/(1000*60);
-        int horas = diferencia/(1000*60*60);
-        int dias = diferencia/(1000*60*60*24);
+        long minutos = diferencia/(1000*60);
+        long horas = diferencia/(1000*60*60);
+        long dias = diferencia/(1000*60*60*24);
 
         if(minutos/60 >= 1){
-            int restominutos = minutos%60;
+            long restominutos = minutos%60;
             respuesta =  String.format("%02d",horas) + ":" + String.format("%02d",restominutos) ;
 
             if(horas/24 >= 1){
-                int restohoras = horas%24;
+                long restohoras = horas%24;
                 respuesta =  dias + " " + context.getString(R.string.util_restarFechas_days) + " " + String.format("%02d",restohoras) + ":" + String.format("%02d",restominutos);
             }
 
         }else{
             respuesta = minutos + " " + context.getString(R.string.util_restarFechas_minutes);
         }
-
         return respuesta;
     }
 

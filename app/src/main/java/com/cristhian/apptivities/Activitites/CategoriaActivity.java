@@ -20,18 +20,19 @@ import android.widget.Toast;
 import com.cristhian.apptivities.Adapters.CategoriaAdapter;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
+import com.cristhian.apptivities.Utils.ToastTipos;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class CategoriaActivity extends AppCompatActivity implements RealmChangeListener<RealmResults<Categoria>>, AdapterView.OnItemClickListener {
-
     private Realm realm;
     private RealmResults<Categoria> categorias;
     private ListView listView;
     private CategoriaAdapter adapter;
     private FloatingActionButton fab;
+    private ToastTipos toastTipos = new ToastTipos(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 if(categoriaName.length()>0){
                     createNewCategory(categoriaName, categoriaDescripcion);
                 }else{
-                    CustomToast(getApplicationContext(),getString(R.string.new_category_dialog_empty_values_message),Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_category_dialog_empty_values_message),Toast.LENGTH_LONG);
                 }
             }
         });
@@ -134,7 +135,7 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
                 String categoriaDescripcion = inputCategoriaDescripcion.getText().toString().trim();
 
                 if(categoriaName.length()==0) {
-                    CustomToast(getApplicationContext(), getString(R.string.edit_category_dialog_empty_values_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.edit_category_dialog_empty_values_message), Toast.LENGTH_LONG);
                 }else{
                     editCategory(categoriaName,categoriaDescripcion,categoria);
                 }
@@ -195,13 +196,6 @@ public class CategoriaActivity extends AppCompatActivity implements RealmChangeL
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void CustomToast(Context context, String mensaje, int duracion){
-        Toast toast = Toast.makeText(context, mensaje, duracion);
-        toast.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        toast.getView().setPadding(10,10,10,10);
-        toast.show();
     }
 
     private void scrollMyListViewToBottom() {

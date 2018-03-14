@@ -1,7 +1,5 @@
 package com.cristhian.apptivities.Activitites;
 
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,10 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,12 +35,11 @@ import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
 import com.cristhian.apptivities.Utils.MaskWatcher;
 import com.cristhian.apptivities.Utils.RealmBackupRestore;
+import com.cristhian.apptivities.Utils.ToastTipos;
 import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.sql.BatchUpdateException;
-import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Case;
@@ -69,8 +64,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
     private Util aux = new Util(this);
     private RealmBackupRestore rbur= new RealmBackupRestore(this);
-
-    private DatePickerDialog datePickerDialog;
+    private ToastTipos toastTipos = new ToastTipos(this);
     private Date fechaSeleccionada = new Date();
 
     @Override
@@ -146,8 +140,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         return categoria;
     }
 
-    private void actividadesXdescripcion(String descripcion, boolean filtroFechas, Date FechaIni, Date FechaFin){
-        if(filtroFechas){
+    private void actividadesXdescripcion(String descripcion, boolean filtroFechas, boolean filtroCategorias, Date FechaIni, Date FechaFin, int categoria_id){
+        if(filtroFechas && filtroCategorias){
+            actividades = realm
+                    .where(Actividad.class)
+                    .contains("descripcion", descripcion, Case.INSENSITIVE)
+                    .equalTo("categoria", categoria_id)
+                    .beginGroup()
+                    .between("fechaIni", FechaIni, FechaFin)
+                    .or()
+                    .between("fechaFin", FechaIni, FechaFin)
+                    .endGroup()
+                    .findAll();
+        }else if(filtroFechas){
             actividades = realm
                     .where(Actividad.class)
                     .contains("descripcion", descripcion, Case.INSENSITIVE)
@@ -156,6 +161,12 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     .or()
                     .between("fechaFin", FechaIni, FechaFin)
                     .endGroup()
+                    .findAll();
+        }else if(filtroCategorias){
+            actividades = realm
+                    .where(Actividad.class)
+                    .contains("descripcion", descripcion, Case.INSENSITIVE)
+                    .equalTo("categoria", categoria_id)
                     .findAll();
         }else{
             actividades = realm
@@ -269,13 +280,13 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
-                    CustomToast(getApplicationContext(),getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
                       createNewActivity(actividadDescripcion,actividadFechaIni,actividadFechaFin, categoria.getId());
                 }
@@ -339,13 +350,13 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_empty_values_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.edit_activity_dialog_empty_values_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputActividadFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
                 }else if(aux.validarFecha(inputActividadFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
-                    CustomToast(getApplicationContext(), getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
+                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
                     editActividad(actividadDescripcion,actividadFechaIni,actividadFechaFin,categoria.getId(),actividad);
                 }
@@ -379,13 +390,40 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
         final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextSearchDescription);
 
+        final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinnerSearchCategoria);
+        datosCategorias();
+        adapter2 = new CategoriaSpinnerAdapter(this, categorias, R.layout.spinner_categoria_item_search);
+        inputCategoria.setAdapter(adapter2);
+        inputCategoria.setEnabled(false);
+
+        final Switch switchCategorias = (Switch) viewInflated.findViewById(R.id.switchSearchCategoria);
+        switchCategorias.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    inputCategoria.setEnabled(true);
+
+                    inputDescripcion.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(inputDescripcion.getWindowToken(), 0);
+                    inputCategoria.requestFocus();
+                }else{
+                    inputCategoria.setEnabled(false);
+
+                    inputDescripcion.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(inputDescripcion, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
+
         final DatePicker inputActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaIni);
         inputActividadFechaIni.setEnabled(false);
 
         final DatePicker inputActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerSearchFechaFin);
         inputActividadFechaFin.setEnabled(false);
 
-        final Switch switchFechas = (Switch) viewInflated.findViewById(R.id.switchSearch);
+        final Switch switchFechas = (Switch) viewInflated.findViewById(R.id.switchSearchFechas);
         switchFechas.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -413,15 +451,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                  String actividadDescripcion = inputDescripcion.getText().toString().trim();
-
                  String actividadFechaIni =  inputActividadFechaIni.getDayOfMonth() + "/" + (inputActividadFechaIni.getMonth()+1) + "/" + inputActividadFechaIni.getYear() + " 00:00";
-                 String actividadFechaFin = inputActividadFechaFin.getDayOfMonth() + "/" + (inputActividadFechaFin.getMonth()+1) + "/" + inputActividadFechaFin.getYear() + " 23:59";
+                 String actividadFechaFin = inputActividadFechaFin.getDayOfMonth() + "/" + (inputActividadFechaFin.getMonth()+1) + "/" + inputActividadFechaFin.getYear() + " 24:00";
                  Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                  Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
-                 if(actividadDescripcion.length()==0){
-                     CustomToast(getApplicationContext(),getString(R.string.search_activity_dialog_error_message), Toast.LENGTH_SHORT);
+                 if(actividadDescripcion.length()==0 && switchCategorias.isChecked() == false){
+                     toastTipos.toastMainShow(getString(R.string.search_activity_dialog_error_message), Toast.LENGTH_SHORT);
                  }else{
-                     actividadesXdescripcion(actividadDescripcion,switchFechas.isChecked(),fechaIniTemp,fechaFinTemp);
+                     int categoria_id = 0;
+                     if(switchCategorias.isChecked()){
+                         Categoria categoria = (Categoria) inputCategoria.getSelectedItem();
+                         categoria_id = categoria.getId();
+                     }
+                     actividadesXdescripcion(actividadDescripcion,switchFechas.isChecked(),switchCategorias.isChecked(),fechaIniTemp,fechaFinTemp, categoria_id);
                      Constructor();
                      setTitle(getString(R.string.activity_activity_title) + ": " + getString(R.string.search_activity_title_mod));
                  }
@@ -509,6 +551,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 return true;
             case R.id.menuRespaldo:
                 showAlertForBackup(getString(R.string.activity_activity_dialog_backup_title), getString(R.string.activity_activity_dialog_backup_message));
+                //grabar();
                 return true;
             case R.id.menuRestaurar:
                 showAlertForRestore(getString(R.string.activity_activity_dialog_restore_title), getString(R.string.activity_activity_dialog_restore_message));
@@ -565,27 +608,18 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         String fechaFin = aux.dateToString(actividad.getFechaFin(), formatoComplejo);
         String mensaje = aux.restarFechas(actividad.getFechaIni(), actividad.getFechaFin());
 
-        CustomToast(this,
-                getString(R.string.activity_activity_toast_title) +"\n" +
+        toastTipos.toastMainShow(getString(R.string.activity_activity_toast_title) +"\n" +
                 getString(R.string.activity_activity_toast_id) + ": " + actividad.getId() + "\n" +
                 getString(R.string.activity_activity_toast_description) + ": " + actividad.getDescripcion() + "\n" +
                 getString(R.string.activity_activity_toast_fechaIni) + ": " + fechaIni + "\n" +
                 getString(R.string.activity_activity_toast_fechaFin) + ": " + fechaFin + "\n" +
                 getString(R.string.activity_activity_toast_category) + ": " + categoriaNombre + "\n" +
-                getString(R.string.activity_activity_toast_time) + ": " + mensaje,
-                Toast.LENGTH_SHORT);
+                getString(R.string.activity_activity_toast_time) + ": " + mensaje,Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onChange(RealmResults<Actividad> element) {
         adapter.notifyDataSetChanged();
-    }
-
-    private void CustomToast(Context context, String mensaje, int duracion){
-        Toast toast = Toast.makeText(context, mensaje, duracion);
-        toast.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        toast.getView().setPadding(10,10,10,10);
-        toast.show();
     }
 
     private void scrollMyListViewToBottom() {

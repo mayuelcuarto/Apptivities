@@ -39,6 +39,7 @@
     <string name="edit_activity_dialog_title">Editar Actividad</string>
     <string name="edit_activity_dialog_message">Modifica la Actividad</string>
     <string name="edit_activity_dialog_positive_button">Guardar</string>
+    <string name="edit_activity_dialog_empty_values_message">La descripción y las fechas son necesarias para editar una Actividad</string>
 
     <string name="delete_activity_dialog_title">Borrar Actividad</string>
     <string name="delete_activity_dialog_message">¿Estás seguro de querer borrar la actividad?</string>
@@ -49,6 +50,7 @@
     <string name="search_activity_dialog_message">Indica una descripción y algunas fechas si deseas</string>
     <string name="search_activity_dialog_error_message">Debes indicar al menos la descripción para realizar una búsqueda</string>
     <string name="search_activity_switch_message">Filtro de fechas</string>
+    <string name="search_activity_switch_categoria_message">Categorías</string>
     <string name="search_activity_title_mod">Modo Búsqueda</string>
     <string name="search_activity_dialog_positive_button">Buscar</string>
     <string name="search_activity_fechaIni_label">Inicio</string>

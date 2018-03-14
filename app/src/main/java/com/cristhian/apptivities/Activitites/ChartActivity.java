@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
+import com.cristhian.apptivities.Utils.ToastTipos;
 import com.cristhian.apptivities.Utils.Util;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -32,6 +33,7 @@ public class ChartActivity extends Activity {
     private Realm realm;
     private RealmResults<Categoria> categorias;
     private Util aux = new Util(this);
+    private ToastTipos toastTipos = new ToastTipos(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,7 @@ public class ChartActivity extends Activity {
         }
 
         BarDataSet dataset = new BarDataSet(entradas,getString(R.string.activity_chart_dataset_label));
-
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataset.setColors(ColorTemplate.MATERIAL_COLORS);
 
         setContentView(R.layout.activity_chart);
         final BarChart grafica = (BarChart) findViewById(R.id.chart);
@@ -85,11 +86,12 @@ public class ChartActivity extends Activity {
                 String categoria = categoriaxID(id);
                 String tiempo = calcularTiempoxCategoria(id);
                 int cantidad = (int) cantidadactividadxcategoria(id);
-                Toast.makeText(getApplicationContext(),
+
+                toastTipos.toastMainShow(
                         categoria + "\n" +
                              getString(R.string.activity_chart_toast_accomplished) + " " + cantidad + " " + getString(R.string.activity_chart_toast_times) + "\n" +
                                 getString(R.string.activity_chart_toast_time) + " " + tiempo,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG);
             }
 
             @Override
@@ -124,13 +126,22 @@ public class ChartActivity extends Activity {
     }
 
     private String calcularTiempoxCategoria(long categoria){
+        /*String formatoComplejo = "dd/MM/yyyy HH:mm";
+        Date fechaIniStatic = aux.stringSimpleToDate(0,"05/01/2018", formatoComplejo);
+        Date fechaFinStatic = aux.stringSimpleToDate(1,"14/03/2018", formatoComplejo);
+        .beginGroup()
+                .between("fechaIni", fechaIniStatic, fechaFinStatic)
+                .or()
+                .between("fechaFin", fechaIniStatic, fechaFinStatic)
+                .endGroup()*/
+
         RealmResults<Actividad> actividades;
         actividades = realm
                 .where(Actividad.class)
                 .equalTo("categoria",categoria)
                 .findAll();
 
-        int acumulado = 0;
+        long acumulado = 0;
         for (Actividad item : actividades) {
             Date fechaIni = item.getFechaIni();
             Date fechaFin = item.getFechaFin();
