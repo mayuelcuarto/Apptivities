@@ -55,6 +55,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private ListView listView;
     private ActividadAdapter adapter;
     private CategoriaSpinnerAdapter adapter2;
+    private CategoriaSpinnerAdapter adapter3;
     private FloatingActionButton fab;
     private FloatingActionButton sfab;
     private FloatingActionButton cfab;
@@ -391,16 +392,19 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextSearchDescription);
 
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinnerSearchCategoria);
+        inputCategoria.setEnabled(false);
+
         datosCategorias();
         adapter2 = new CategoriaSpinnerAdapter(this, categorias, R.layout.spinner_categoria_item_search);
+        adapter3 = new CategoriaSpinnerAdapter(this, categorias, R.layout.spinner_categoria_item);
         inputCategoria.setAdapter(adapter2);
-        inputCategoria.setEnabled(false);
 
         final Switch switchCategorias = (Switch) viewInflated.findViewById(R.id.switchSearchCategoria);
         switchCategorias.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    inputCategoria.setAdapter(adapter3);
                     inputCategoria.setEnabled(true);
 
                     inputDescripcion.clearFocus();
@@ -408,6 +412,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                     imm.hideSoftInputFromWindow(inputDescripcion.getWindowToken(), 0);
                     inputCategoria.requestFocus();
                 }else{
+                    inputCategoria.setAdapter(adapter2);
                     inputCategoria.setEnabled(false);
 
                     inputDescripcion.requestFocus();

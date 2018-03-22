@@ -9,9 +9,7 @@
         <TextView
             android:id="@+id/textViewCategoriaName"
             android:textSize="18sp"
-            android:textColor="@color/colorPrimaryDark"
             android:layout_width="match_parent"
-            android:gravity="right"
             android:layout_height="wrap_content"
             android:background="@drawable/border_style"
             android:padding="5dp" />
