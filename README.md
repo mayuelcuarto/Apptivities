@@ -4,8 +4,9 @@ Apptivities es un proyecto de tiempo libre en el cuál he tratado de crear una a
 
 Las tecnologías que utiliza son:
 
-- compileSdkVersion 23.
+- compileSdkVersion 23
+- targetSdkVersion 23.
 - minSdkVersion 21
-- Gestor de base de datos realm-database
+- Gestor de base de datos realm-database 2.3.2
 
 Actualmente el app funciona en entorno local exclusivamente (no conecta con ningún recurso de internet).
