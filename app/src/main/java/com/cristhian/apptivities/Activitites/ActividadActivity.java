@@ -587,10 +587,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 Intent intent = new Intent(ActividadActivity.this, CategoriaActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.menuGrafica:
-                Intent intent2 = new Intent(ActividadActivity.this, ChartActivity.class);
-                startActivity(intent2);
-                return true;
             case R.id.menuRespaldo:
                 showAlertForBackup(getString(R.string.activity_activity_dialog_backup_title), getString(R.string.activity_activity_dialog_backup_message));
                 //grabar();
