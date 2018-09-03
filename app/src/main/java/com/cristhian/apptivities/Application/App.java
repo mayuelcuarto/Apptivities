@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
+import com.cristhian.apptivities.Models.Migration;
 import com.cristhian.apptivities.Models.Usuario;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -45,7 +46,11 @@ public class App extends Application {
 
     private void setUpRealmConfig() {
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("default.realm")
+                .schemaVersion(1)
+                .migration(new Migration())
+                .build();
         Realm.setDefaultConfiguration(config);
     }
 
