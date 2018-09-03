@@ -41,43 +41,56 @@ public class ChartActivityDetail extends Activity {
         super.onCreate(savedInstanceState);
         this.setTitle(R.string.activity_chart_title);
 
+        //Recuperamos los parametros de las fechas de inicio y fin, posteriormente
+        //los convertimos a date para poder trabajar con ellos
         String fechaIni = getIntent().getExtras().getString("fechaIni");
         String fechaFin = getIntent().getExtras().getString("fechaFin");
-        Date fechaIniDate = aux.stringToDate(fechaIni, formatoComplejo);
-        Date fechaFinDate = aux.stringToDate(fechaFin, formatoComplejo);
+        final Date fechaIniDate = aux.stringToDate(fechaIni, formatoComplejo);
+        final Date fechaFinDate = aux.stringToDate(fechaFin, formatoComplejo);
+
+        //Iniciamos la instancia de realm
         realm = Realm.getDefaultInstance();
-        RealmResults<Actividad> actividades = actividadesXFechas(fechaIniDate, fechaFinDate);
-        RealmResults<Actividad> actividades2 = actividadesXFechasDistinct(fechaIniDate, fechaFinDate);
-        //categorias();
+
+        //Recuperamos un realmResult de Actividad filtrado por fechas y distinct de Categoría (ordenado por Categoria)
+        final RealmResults<Actividad> actividadesDistinct = actividadesXFechasDistinct(fechaIniDate, fechaFinDate);
+
+        //Declaramos un ArrayList vacío para las entradas de la gráfica
         ArrayList<BarEntry> entradas = new ArrayList<>();
 
-        for(int i = 0; i<actividades2.size();i++){
-            float cantidad = cantidadactividadxcategoria(actividades2.get(i).getCategoria());
-            entradas.add(new BarEntry(i,cantidad, categorias.get(i).getName()));
+        //Empezamos la
+        int i = 0;
+        for(Actividad a : actividadesDistinct){
+            float cantidad = cantidadactividadxcategoriaFechas(a.getCategoria(), fechaIniDate, fechaFinDate);
+            //Añadiendo entradas al eje x
+            entradas.add(new BarEntry(i,cantidad, a.getCategoria()));
+            i++;
         }
 
+        //Vinculamos las entradas al BarDataSet
         BarDataSet dataset = new BarDataSet(entradas,getString(R.string.activity_chart_dataset_label));
         dataset.setColors(ColorTemplate.MATERIAL_COLORS);
 
         setContentView(R.layout.activity_chart);
+        //Esta es la variable general de Chart
         final BarChart grafica = (BarChart) findViewById(R.id.chart);
 
+        //Vinculamos el BarDataSet al BarData
         BarData datos = new BarData(dataset);
 
         Description description = new Description();
         description.setText(getString(R.string.activity_chart_description));
+        //Asignamos descripcion y datos a la variable chart más grande
         grafica.setDescription(description);
-
         grafica.setData(datos);
-
         grafica.animateY(5000);
 
         IAxisValueFormatter formatter = new IAxisValueFormatter() {
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
+                // Mediante este método que valor se desplegará desde el eje x
                 int valor = (int) value;
-                return String.valueOf(categorias.get(valor).getId());
+                return String.valueOf(actividadesDistinct.get(valor).getCategoria());
             }
 
         };
@@ -89,10 +102,11 @@ public class ChartActivityDetail extends Activity {
         grafica.setOnChartValueSelectedListener( new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                int id = (int) e.getX() + 1;
-                String categoria = categoriaxID(id);
-                String tiempo = calcularTiempoxCategoria(id);
-                int cantidad = (int) cantidadactividadxcategoria(id);
+                //Obtener la data de el elemento seleccionado
+                long id = (long) e.getData();
+                String categoria = categoriaxID((int)id);
+                String tiempo = calcularTiempoxCategoriaFechas(id, fechaIniDate, fechaFinDate);
+                int cantidad = (int) cantidadactividadxcategoriaFechas(id, fechaIniDate, fechaFinDate);
 
                 toastTipos.toastMainShow(
                         categoria + "\n" +
@@ -108,41 +122,30 @@ public class ChartActivityDetail extends Activity {
         });
     }
 
-    private RealmResults<Actividad> actividadesXFechas(Date fechaIni, Date fechaFin){
-        RealmResults<Actividad> actividades;
-        actividades = realm
-                .where(Actividad.class)
-                .beginGroup()
-                .between("fechaIni", fechaIni, fechaFin)
-                .between("fechaFin", fechaIni, fechaFin)
-                .endGroup()
-                .findAll();
-        return actividades;
-    }
-
     private RealmResults<Actividad> actividadesXFechasDistinct(Date fechaIni, Date fechaFin){
         RealmResults<Actividad> actividades;
         actividades = realm
                 .where(Actividad.class)
                 .beginGroup()
                 .between("fechaIni", fechaIni, fechaFin)
+                .or()
                 .between("fechaFin", fechaIni, fechaFin)
                 .endGroup()
-                .distinct("categoria");
+                .distinct("categoria")
+                .sort("categoria");
         return actividades;
     }
 
-    private void categorias(){
-        categorias = realm
-                .where(Categoria.class)
-                .findAll();
-    }
-
-    private float cantidadactividadxcategoria(long categoria){
+    private float cantidadactividadxcategoriaFechas(long categoria, Date fechaIni, Date fechaFin){
         RealmResults<Actividad> actividades;
         actividades = realm
                 .where(Actividad.class)
                 .equalTo("categoria",categoria)
+                .beginGroup()
+                .between("fechaIni", fechaIni, fechaFin)
+                .or()
+                .between("fechaFin", fechaIni, fechaFin)
+                .endGroup()
                 .findAll();
         return actividades.size();
     }
@@ -156,20 +159,16 @@ public class ChartActivityDetail extends Activity {
         return categorias2.getName();
     }
 
-    private String calcularTiempoxCategoria(long categoria){
-        /*String formatoComplejo = "dd/MM/yyyy HH:mm";
-        Date fechaIniStatic = aux.stringSimpleToDate(0,"05/01/2018", formatoComplejo);
-        Date fechaFinStatic = aux.stringSimpleToDate(1,"14/03/2018", formatoComplejo);
-        .beginGroup()
-                .between("fechaIni", fechaIniStatic, fechaFinStatic)
-                .or()
-                .between("fechaFin", fechaIniStatic, fechaFinStatic)
-                .endGroup()*/
-
+    private String calcularTiempoxCategoriaFechas(long categoria, Date fechaIniV, Date fechaFinV){
         RealmResults<Actividad> actividades;
         actividades = realm
                 .where(Actividad.class)
                 .equalTo("categoria",categoria)
+                .beginGroup()
+                .between("fechaIni", fechaIniV, fechaFinV)
+                .or()
+                .between("fechaFin", fechaIniV, fechaFinV)
+                .endGroup()
                 .findAll();
 
         long acumulado = 0;
