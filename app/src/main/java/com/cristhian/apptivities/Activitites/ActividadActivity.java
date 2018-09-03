@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +41,7 @@ import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.Case;
@@ -59,6 +61,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
     private FloatingActionButton fab;
     private FloatingActionButton sfab;
     private FloatingActionButton cfab;
+    private FloatingActionButton gfab;
     private static String formatoHora = "HH";
     private static String formatoMinuto = "mm";
     private static String formatoSimple = "dd/MM/yyyy";
@@ -101,6 +104,16 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 showAlertForSearchActividad(
                         getString(R.string.search_activity_dialog_title),
                         getString(R.string.search_activity_dialog_message));
+            }
+        });
+
+        gfab = (FloatingActionButton) findViewById(R.id.fabGraphic);
+        gfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertForGraphicActividad(
+                        getString(R.string.graphic_activity_dialog_title),
+                        getString(R.string.graphic_activity_dialog_message));
             }
         });
 
@@ -477,6 +490,30 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         );
         fechaSeleccionada = new Date();
         CustomTitleAndShow(builder,R.layout.dialog_search_actividad_title,R.id.textViewTitleSearch,title,message);
+    }
+
+    private void showAlertForGraphicActividad(String title, String message){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialog);
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_graphic_actividad, null);
+        builder.setView(viewInflated);
+
+        final DatePicker inputActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerGraphicFechaIni);
+        final DatePicker inputActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerGraphicFechaFin);
+
+        builder.setPositiveButton(getString(R.string.graphic_activity_dialog_positive_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String actividadFechaIni =  inputActividadFechaIni.getDayOfMonth() + "/" + (inputActividadFechaIni.getMonth()+1) + "/" + inputActividadFechaIni.getYear() + " 00:00";
+                        String actividadFechaFin = inputActividadFechaFin.getDayOfMonth() + "/" + (inputActividadFechaFin.getMonth()+1) + "/" + inputActividadFechaFin.getYear() + " 24:00";
+
+                        Intent intent2 = new Intent(ActividadActivity.this, ChartActivityDetail.class);
+                        intent2.putExtra("fechaIni", actividadFechaIni);
+                        intent2.putExtra("fechaFin", actividadFechaFin);
+                        startActivity(intent2);
+                    }
+                }
+        );
+        CustomTitleAndShow(builder,R.layout.dialog_graphic_actividad_title,R.id.textViewTitleGraphic,title,message);
     }
 
     private void showAlertForBackup(String title, String message){
