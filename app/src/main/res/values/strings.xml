@@ -56,6 +56,13 @@
     <string name="search_activity_fechaIni_label">Start</string>
     <string name="search_activity_fechaFin_label">End</string>
 
+    <string name="graphic_activity_dialog_title">Graphic Activity</string>
+    <string name="graphic_activity_dialog_message">Set start and end date to view a detail graphic</string>
+    <string name="graphic_activity_dialog_error_message">The end date cannot be less than start date</string>
+    <string name="graphic_activity_dialog_positive_button">View Graphic</string>
+    <string name="graphic_activity_fechaIni_label">Start</string>
+    <string name="graphic_activity_fechaFin_label">End</string>
+
     <string name="edit_category_dialog_title">Edit Category</string>
     <string name="edit_category_dialog_message">Modify the Category</string>
     <string name="edit_category_dialog_positive_button">Save</string>

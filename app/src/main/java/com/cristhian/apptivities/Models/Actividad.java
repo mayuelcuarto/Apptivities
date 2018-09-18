@@ -5,6 +5,7 @@ import com.cristhian.apptivities.Application.App;
 import java.util.Date;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -21,6 +22,7 @@ public class Actividad extends RealmObject {
     private Date fechaIni;
     @Required
     private Date fechaFin;
+    @Index
     private long categoria;
     public Actividad() {
     }

@@ -56,6 +56,13 @@
     <string name="search_activity_fechaIni_label">Inicio</string>
     <string name="search_activity_fechaFin_label">Fin</string>
 
+    <string name="graphic_activity_dialog_title">Graficar Actividades</string>
+    <string name="graphic_activity_dialog_message">Indica las fechas de inicio y fin para ver un gráfico detallado</string>
+    <string name="graphic_activity_dialog_error_message">La fecha de fin no puede ser menor que la fecha de inicio</string>
+    <string name="graphic_activity_dialog_positive_button">Ver Gráfico</string>
+    <string name="graphic_activity_fechaIni_label">Inicio</string>
+    <string name="graphic_activity_fechaFin_label">Fin</string>
+
     <string name="edit_category_dialog_title">Editar Categoría</string>
     <string name="edit_category_dialog_message">Modifica la Categoría</string>
     <string name="edit_category_dialog_positive_button">Guardar</string>
