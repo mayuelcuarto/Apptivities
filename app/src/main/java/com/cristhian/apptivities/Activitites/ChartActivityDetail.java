@@ -31,7 +31,6 @@ import io.realm.RealmResults;
 public class ChartActivityDetail extends Activity {
 
     private Realm realm;
-    private RealmResults<Categoria> categorias;
     private Util aux = new Util(this);
     private ToastTipos toastTipos = new ToastTipos(this);
     private static String formatoComplejo = "dd/MM/yyyy HH:mm";
