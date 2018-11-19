@@ -87,7 +87,7 @@ public class ChartActivityDetail extends Activity {
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                // Mediante este método que valor se desplegará desde el eje x
+                // Mediante este método seteamos que valor se desplegará desde el eje x
                 int valor = (int) value;
                 return String.valueOf(actividadesDistinct.get(valor).getCategoria());
             }

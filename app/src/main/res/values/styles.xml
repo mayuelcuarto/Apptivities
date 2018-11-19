@@ -19,10 +19,14 @@
         <item name="android:timePickerMode">spinner</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:format24Hour">true</item>
     </style>
 
     <style name="MyDatePickerWidgetStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
         <item name="android:calendarViewShown">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="MyCalendarStyle" parent="@android:style/Widget.Material.DatePicker">

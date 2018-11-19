@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -34,14 +33,12 @@ import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
-import com.cristhian.apptivities.Utils.MaskWatcher;
 import com.cristhian.apptivities.Utils.RealmBackupRestore;
 import com.cristhian.apptivities.Utils.ToastTipos;
 import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.Case;
@@ -261,13 +258,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         builder.setView(viewInflated);
 
         final EditText inputDescripcion = (EditText) viewInflated.findViewById(R.id.editTextNewActividadDescripcion);
-        final EditText inputFechaIni = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaIni);
-        inputFechaIni.setText(aux.dateToString(new Date(), formatoComplejo));
-        inputFechaIni.addTextChangedListener(new MaskWatcher("##/##/####"));
-
-        final EditText inputFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
-        inputFechaFin.setText(aux.dateToString(new Date(), formatoComplejo));
-        inputFechaFin.addTextChangedListener(new MaskWatcher("##/##/####"));
+        final DatePicker inputDatePickerActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerNewActividadFechaIni);
+        final DatePicker inputDatePickerActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerNewActividadFechaFin);
 
         final TimePicker inputTimePickerActividadFechaIni = (TimePicker) viewInflated.findViewById(R.id.timePickerNewActividadFechaIni);
         inputTimePickerActividadFechaIni.setIs24HourView(true);
@@ -285,8 +277,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String actividadDescripcion = inputDescripcion.getText().toString().trim();
-                String actividadFechaIni = inputFechaIni.getText().toString().trim() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
-                String actividadFechaFin = inputFechaFin.getText().toString().trim() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
+                String actividadFechaIni = inputDatePickerActividadFechaIni.getDayOfMonth() + "/" + (inputDatePickerActividadFechaIni.getMonth() + 1) + "/" + inputDatePickerActividadFechaIni.getYear() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
+                String actividadFechaFin = inputDatePickerActividadFechaFin.getDayOfMonth() + "/" + (inputDatePickerActividadFechaFin.getMonth() + 1) + "/" + inputDatePickerActividadFechaFin.getYear() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
 
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
@@ -295,10 +287,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0){
                     toastTipos.toastMainShow(getString(R.string.new_activity_dialog_empty_values_message),Toast.LENGTH_LONG);
-                }else if(aux.validarFecha(inputFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
-                }else if(aux.validarFecha(inputFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     toastTipos.toastMainShow(getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
@@ -317,11 +305,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
         builder.setView(viewInflated);
 
         final EditText inputActividadDescripcion = (EditText) viewInflated.findViewById(R.id.editTextNewActividadDescripcion);
-        final EditText inputActividadFechaIni = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaIni);
-        inputActividadFechaIni.addTextChangedListener(new MaskWatcher("##/##/####"));
-
-        final EditText inputActividadFechaFin = (EditText) viewInflated.findViewById(R.id.editTextNewActividadFechaFin);
-        inputActividadFechaFin.addTextChangedListener(new MaskWatcher("##/##/####"));
+        final DatePicker inputDatePickerActividadFechaIni = (DatePicker) viewInflated.findViewById(R.id.datePickerNewActividadFechaIni);
+        final DatePicker inputDatePickerActividadFechaFin = (DatePicker) viewInflated.findViewById(R.id.datePickerNewActividadFechaFin);
 
         final Spinner inputCategoria = (Spinner) viewInflated.findViewById(R.id.spinner);
 
@@ -333,13 +318,11 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
         inputActividadDescripcion.setText(actividad.getDescripcion());
 
-        String fechaIniStr = aux.dateToString(actividad.getFechaIni(), formatoSimple);
-        inputActividadFechaIni.setText(fechaIniStr);
+        inputDatePickerActividadFechaIni.getCalendarView().setDate(actividad.getFechaIni().getTime());
         inputTimePickerActividadFechaIni.setCurrentHour(Integer.parseInt(aux.dateToString(actividad.getFechaIni(), formatoHora)));
         inputTimePickerActividadFechaIni.setCurrentMinute(Integer.parseInt(aux.dateToString(actividad.getFechaIni(), formatoMinuto)));
 
-        String fechaFinStr = aux.dateToString(actividad.getFechaFin(), formatoSimple);
-        inputActividadFechaFin.setText(fechaFinStr);
+        inputDatePickerActividadFechaFin.getCalendarView().setDate(actividad.getFechaFin().getTime());
         inputTimePickerActividadFechaFin.setCurrentHour(Integer.parseInt(aux.dateToString(actividad.getFechaFin(), formatoHora)));
         inputTimePickerActividadFechaFin.setCurrentMinute(Integer.parseInt(aux.dateToString(actividad.getFechaFin(), formatoMinuto)));
 
@@ -355,8 +338,8 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String actividadDescripcion = inputActividadDescripcion.getText().toString().trim();
-                String actividadFechaIni = inputActividadFechaIni.getText().toString().trim() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
-                String actividadFechaFin = inputActividadFechaFin.getText().toString().trim() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
+                String actividadFechaIni = inputDatePickerActividadFechaIni.getDayOfMonth() + "/" + (inputDatePickerActividadFechaIni.getMonth() + 1) + "/" + inputDatePickerActividadFechaIni.getYear() + " " + inputTimePickerActividadFechaIni.getCurrentHour() + ":" + inputTimePickerActividadFechaIni.getCurrentMinute();
+                String actividadFechaFin = inputDatePickerActividadFechaFin.getDayOfMonth() + "/" + (inputDatePickerActividadFechaFin.getMonth() + 1) + "/" + inputDatePickerActividadFechaFin.getYear() + " " + inputTimePickerActividadFechaFin.getCurrentHour() + ":" + inputTimePickerActividadFechaFin.getCurrentMinute();
 
                 Date fechaIniTemp = aux.stringToDate(actividadFechaIni, formatoComplejo);
                 Date fechaFinTemp = aux.stringToDate(actividadFechaFin, formatoComplejo);
@@ -365,10 +348,6 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
 
                 if(actividadDescripcion.length()==0 || actividadFechaIni.length()==0 || actividadFechaFin.length()==0) {
                     toastTipos.toastMainShow(getString(R.string.edit_activity_dialog_empty_values_message), Toast.LENGTH_LONG);
-                }else if(aux.validarFecha(inputActividadFechaIni.getText().toString().trim(),formatoSimple)==false){
-                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaIni_message), Toast.LENGTH_LONG);
-                }else if(aux.validarFecha(inputActividadFechaFin.getText().toString().trim(),formatoSimple)==false){
-                    toastTipos.toastMainShow(getString(R.string.new_activity_dialog_wrong_fechaFin_message), Toast.LENGTH_LONG);
                 }else if(fechaIniTemp.getTime() > fechaFinTemp.getTime()){
                     toastTipos.toastMainShow(getString(R.string.new_activity_dialog_date_calculate_error_message), Toast.LENGTH_LONG);
                 }else{
