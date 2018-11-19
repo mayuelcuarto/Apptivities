@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -34,14 +33,12 @@ import com.cristhian.apptivities.Adapters.CategoriaSpinnerAdapter;
 import com.cristhian.apptivities.Models.Actividad;
 import com.cristhian.apptivities.Models.Categoria;
 import com.cristhian.apptivities.R;
-import com.cristhian.apptivities.Utils.MaskWatcher;
 import com.cristhian.apptivities.Utils.RealmBackupRestore;
 import com.cristhian.apptivities.Utils.ToastTipos;
 import com.cristhian.apptivities.Utils.Util;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.Case;
