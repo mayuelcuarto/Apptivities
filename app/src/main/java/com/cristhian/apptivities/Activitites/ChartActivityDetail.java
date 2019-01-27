@@ -23,6 +23,8 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -56,13 +58,24 @@ public class ChartActivityDetail extends Activity {
         //Declaramos un ArrayList vacío para las entradas de la gráfica
         ArrayList<BarEntry> entradas = new ArrayList<>();
 
-        //Empezamos la
-        int i = 0;
+        //Declaramos un ArrayList temporal para almacenar y ordenar los datos antes de enviarlos a la gráfica
+        final ArrayList<ActividadTemp> entradasTemp = new ArrayList<>();
+
         for(Actividad a : actividadesDistinct){
             float cantidad = cantidadactividadxcategoriaFechas(a.getCategoria(), fechaIniDate, fechaFinDate);
-            //Añadiendo entradas al eje x
-            entradas.add(new BarEntry(i,cantidad, a.getCategoria()));
-            i++;
+            //Añadiendo entradas al array temporal
+            entradasTemp.add(new ActividadTemp(a.getCategoria(), cantidad));
+        }
+
+        //Ordenamos el array temporal con los filtros especificados en las clases de abajo
+        Collections.sort(entradasTemp, new sortByCantidad());
+
+        //La variable k la usaremos para el eje x de la gráfica, cantidad sera tomada como el eje y, categoria será la data
+        int k = 0;
+        for(ActividadTemp a : entradasTemp){
+            //Añadiendo entradas al array final que se enviará a la gráfica
+            entradas.add(new BarEntry(k, a.cantidad,  a.categoria));
+            k++;
         }
 
         //Vinculamos las entradas al BarDataSet
@@ -89,7 +102,7 @@ public class ChartActivityDetail extends Activity {
             public String getFormattedValue(float value, AxisBase axis) {
                 // Mediante este método seteamos que valor se desplegará desde el eje x
                 int valor = (int) value;
-                return String.valueOf(actividadesDistinct.get(valor).getCategoria());
+                return String.valueOf(entradasTemp.get(valor).categoria);
             }
 
         };
@@ -179,5 +192,29 @@ public class ChartActivityDetail extends Activity {
         }
 
         return aux.convertirTiempo(acumulado);
+    }
+}
+
+class ActividadTemp
+{
+    float cantidad;
+    long categoria;
+
+    // Constructor
+    public ActividadTemp(long categoria, float cantidad)
+    {
+        this.cantidad = cantidad;
+        this.categoria = categoria;
+    }
+}
+
+class sortByCantidad implements Comparator<ActividadTemp>
+{
+    // Used for sorting in ascending order of
+    // roll number
+    public int compare(ActividadTemp a, ActividadTemp b)
+    {
+        float resta = b.cantidad - a.cantidad;
+        return (int) resta;
     }
 }

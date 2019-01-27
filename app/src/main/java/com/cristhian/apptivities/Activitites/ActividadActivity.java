@@ -134,7 +134,7 @@ public class ActividadActivity extends AppCompatActivity implements RealmChangeL
                 .between("fechaIni", aux.todayFiltro(0, new Date()), aux.todayFiltro(1, new Date()))
                 .or()
                 .between("fechaFin", aux.todayFiltro(0, new Date()), aux.todayFiltro(1, new Date()))
-                .findAll();
+                .findAllSorted("id");
     }
 
     private void datosCategorias(){
